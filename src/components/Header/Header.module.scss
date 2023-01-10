@@ -1,0 +1,32 @@
+.header {
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 1rem;
+  .logo {
+    text-transform: uppercase;
+    padding: 5px 10px;
+  }
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    .link {
+      margin-left: 1rem;
+      .button {
+        border-radius: 10px;
+        border: 2px solid black;
+        padding: 5px 10px;
+      }
+    }
+    .active {
+      border-bottom: 2px solid black;
+    }
+  }
+}
+a:visited,
+a:link {
+  text-decoration: none;
+  color: black;
+}
