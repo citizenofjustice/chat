@@ -8,7 +8,7 @@ import Button from "../UI/Button";
 import styles from "./AuthForm.module.scss";
 
 const AuthForm = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const emailInput = useRef();
   const passwordInput = useRef();
   const dispatch = useDispatch();
@@ -16,15 +16,55 @@ const AuthForm = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-
     const enteredEmail = emailInput.current.value;
     const enteredPassword = passwordInput.current.value;
-    if (enteredEmail !== "" && enteredPassword !== "") {
-      dispatch(authActions.login());
-      navigate("/");
+
+    let url;
+    if (isLogin) {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAr3wMeLPj8j_PmyxeoGF-nmAvltdSjdlQ";
     } else {
-      console.log("One of input fields of auth window is empty");
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAr3wMeLPj8j_PmyxeoGF-nmAvltdSjdlQ";
     }
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        email: enteredEmail,
+        password: enteredPassword,
+        returnSecureToken: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          res
+            .json()
+            .then((data) => {
+              let errorMessage = "Authentication failed!";
+              if (data && data.error && data.error.message) {
+                errorMessage = data.error.message;
+              }
+              throw new Error(errorMessage);
+            })
+            .catch((err) => {
+              alert(err.message);
+            });
+        }
+      })
+      .then((data) => {
+        if (data) {
+          dispatch(authActions.login());
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        throw new Error(err.message);
+      });
   };
 
   const authModeHandler = () => {
@@ -35,7 +75,7 @@ const AuthForm = () => {
     <section className={styles["auth-form"]}>
       <div className={styles.wrapper}>
         <div className={styles.title}>
-          {isLogin ? "Новая учетная запись" : "Войти в учетную запись"}
+          {isLogin ? "Войти в учетную запись" : "Новая учетная запись"}
         </div>
         <form onSubmit={submitHandler}>
           <div className={styles.field}>
@@ -54,12 +94,12 @@ const AuthForm = () => {
           <div>
             <div className={styles.actions}>
               <Button type="green">
-                {isLogin ? "Зарегистрироваться" : "Войти"}
+                {isLogin ? "Войти" : "Зарегистрироваться"}
               </Button>
               <p className={styles.switch} onClick={authModeHandler}>
                 {isLogin
-                  ? "Есть учетная запись"
-                  : "Создать новую учетную запись"}
+                  ? "Создать новую учетную запись"
+                  : "Есть учетная запись"}
               </p>
             </div>
           </div>
