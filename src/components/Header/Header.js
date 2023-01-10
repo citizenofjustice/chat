@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 
+import Button from "../UI/Button";
 import styles from "./Header.module.scss";
 
 // custom navLink with path passed through props
@@ -7,10 +8,11 @@ const CustomLink = (props) => {
   return (
     <li className={styles.link}>
       <NavLink
-        className={(navData) => (navData.isPending ? styles.active : "")}
+        className={(navData) => (navData.isActive ? styles.active : "")}
         to={props.path}
       >
-        <div className={styles.button}>{props.children}</div>
+        <Button>{props.children}</Button>
+        {/* <div className={styles.button}></div> */}
       </NavLink>
     </li>
   );

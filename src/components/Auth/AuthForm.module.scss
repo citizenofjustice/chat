@@ -1,0 +1,45 @@
+@import "../../styles/variables.module.scss";
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .wrapper {
+    border: 2px solid rgb(161, 189, 151);
+    background-color: rgb(39, 151, 29);
+    padding: 2rem;
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+    .title {
+      text-align: center;
+      font-size: 1.5rem;
+    }
+    .field {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 1rem;
+      label {
+        padding-bottom: 5px;
+        text-align: center;
+      }
+      input {
+        border: none;
+        border-radius: 5px;
+        padding: 8px;
+        background-color: rgb(199, 255, 199);
+        color: $intutTextColor;
+        font-weight: bold;
+        font-family: $mainFont;
+      }
+      input:focus {
+        outline: 2px solid rgb(237, 200, 114);
+      }
+    }
+    .actions {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

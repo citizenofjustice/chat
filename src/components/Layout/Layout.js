@@ -4,7 +4,7 @@ const Layout = (props) => {
   return (
     <>
       <Header />
-      <main>{props.children}</main>
+      <main style={{ margin: "0 auto" }}>{props.children}</main>
     </>
   );
 };
