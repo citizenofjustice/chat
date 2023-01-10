@@ -2,12 +2,12 @@
 
 .button {
   border-radius: 10px;
-  font-size: 1rem;
+  font-size: $mainFontSize;
   font-weight: bold;
-  padding: 8px 16px;
+  line-height: 2rem;
 }
 .green {
   background-color: $controlsBackColor;
   border: 2px solid $controlsBorderColor;
-  color: $intutTextColor;
+  color: $inputTextColor;
 }

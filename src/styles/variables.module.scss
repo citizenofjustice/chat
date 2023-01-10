@@ -1,6 +1,7 @@
 $mainFont: "Rubik", sans-serif;
 $mainFontSize: 1rem;
+$fontSizeTitle: $mainFontSize * 1.5;
 $backgroundColor: rgb(39, 151, 29);
-$intutTextColor: darken($backgroundColor, 15%);
+$inputTextColor: darken($backgroundColor, 15%);
 $controlsBackColor: lighten($backgroundColor, 50%);
-$controlsBorderColor: mix($backgroundColor, gray, 30%);
+$controlsBorderColor: mix($backgroundColor, gray, 15%);

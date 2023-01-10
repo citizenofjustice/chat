@@ -8,30 +8,32 @@
     border: 2px solid rgb(161, 189, 151);
     background-color: rgb(39, 151, 29);
     padding: 2rem;
-    font-size: 1rem;
     color: white;
     font-weight: bold;
+    width: 350px;
     .title {
+      padding: 0.5rem 0;
       text-align: center;
-      font-size: 1.5rem;
+      font-size: $fontSizeTitle;
     }
     .field {
-      margin-top: 1rem;
+      margin: 0.5rem 0;
       display: flex;
       flex-direction: column;
-      padding-bottom: 1rem;
+      align-items: stretch;
       label {
-        padding-bottom: 5px;
+        padding-bottom: 0.5rem;
         text-align: center;
       }
       input {
         border: none;
-        border-radius: 5px;
-        padding: 8px;
+        border-radius: 0.3125rem;
+        padding: 0.5rem;
         background-color: rgb(199, 255, 199);
-        color: $intutTextColor;
+        color: $inputTextColor;
         font-weight: bold;
         font-family: $mainFont;
+        font-size: $mainFontSize;
       }
       input:focus {
         outline: 2px solid rgb(237, 200, 114);
@@ -39,7 +41,18 @@
     }
     .actions {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      .switch {
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        text-align: center;
+        color: lighten($backgroundColor, 40%);
+      }
+      .switch:hover {
+        cursor: pointer;
+        color: lighten($backgroundColor, 80%);
+      }
     }
   }
 }

@@ -1,9 +1,9 @@
-import UserInfo from "../Profile/UserInfo";
+import Profile from "../Profile/Profile";
 
 const ProfilePage = () => {
   return (
     <>
-      <UserInfo />
+      <Profile />
     </>
   );
 };
