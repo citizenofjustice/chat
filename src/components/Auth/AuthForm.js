@@ -1,11 +1,9 @@
 import { useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
-import { authActions, loginUser } from "../../store/auth-slice";
 import Button from "../UI/Button";
-
 import styles from "./AuthForm.module.scss";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../store/auth-slice";
+import { useNavigate } from "react-router-dom";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -19,69 +17,57 @@ const AuthForm = () => {
     const enteredEmail = emailInput.current.value;
     const enteredPassword = passwordInput.current.value;
 
-    const data = loginUser(isLogin, enteredEmail, enteredPassword);
-    if (data) {
-      dispatch(
-        authActions.login({
-          user: data.email,
-          accessToken: data.idToken,
-        })
-      );
-      // navigate("/");
+    let url;
+    if (isLogin) {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAr3wMeLPj8j_PmyxeoGF-nmAvltdSjdlQ";
+    } else {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAr3wMeLPj8j_PmyxeoGF-nmAvltdSjdlQ";
     }
-
-    // let url;
-    // if (isLogin) {
-    //   url =
-    //     "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAr3wMeLPj8j_PmyxeoGF-nmAvltdSjdlQ";
-    // } else {
-    //   url =
-    //     "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAr3wMeLPj8j_PmyxeoGF-nmAvltdSjdlQ";
-    // }
-    // fetch(url, {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     email: enteredEmail,
-    //     password: enteredPassword,
-    //     returnSecureToken: true,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => {
-    //     if (res.ok) {
-    //       return res.json();
-    //     } else {
-    //       res
-    //         .json()
-    //         .then((data) => {
-    //           let errorMessage = "Authentication failed!";
-    //           if (data && data.error && data.error.message) {
-    //             errorMessage = data.error.message;
-    //           }
-    //           throw new Error(errorMessage);
-    //         })
-    //         .catch((err) => {
-    //           alert(err.message);
-    //         });
-    //     }
-    //   })
-    //   .then((data) => {
-    //     if (data) {
-    //       dispatch(
-    //         authActions.login({
-    //           user: data.email,
-    //           accessToken: data.idToken,
-    //         })
-    //       );
-    //       localStorage.setItem("token", data.idToken);
-    //       navigate("/");
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     throw new Error(err.message);
-    //   });
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        email: enteredEmail,
+        password: enteredPassword,
+        returnSecureToken: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          // console.log("res.json()", res.json());
+          return res.json();
+        } else {
+          res
+            .json()
+            .then((data) => {
+              let errorMessage = "Authentication failed!";
+              if (data && data.error && data.error.message) {
+                errorMessage = data.error.message;
+              }
+              throw new Error(errorMessage);
+            })
+            .catch((err) => {
+              alert(err.message);
+            });
+        }
+      })
+      .then((data) => {
+        if (data) {
+          localStorage.setItem("user", JSON.stringify(data.email));
+          localStorage.setItem("token", JSON.stringify(data.idToken));
+          dispatch(
+            authActions.login({ user: data.email, token: data.idToken })
+          );
+          navigate("/profile");
+        }
+      })
+      .catch((err) => {
+        throw new Error(err.message);
+      });
   };
 
   const authModeHandler = () => {

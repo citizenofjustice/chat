@@ -1,30 +1,17 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../../store/auth-slice";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../hooks/use-auth";
 
-import {
-  authActions,
-  logoutUser,
-  getTokenHandler,
-} from "../../store/auth-slice";
 import Button from "../UI/Button";
 import styles from "./Header.module.scss";
 
 // custom navLink with path passed through props
 const CustomLink = (props) => {
-  const dispatch = useDispatch();
-
-  const logoutHandler = () => {
-    logoutUser();
-    dispatch(authActions.logout());
-  };
-
   return (
     <li className={styles.link}>
       <Button type="green">
         <NavLink
-          onClick={logoutHandler}
+          onClick={props.onClick}
           className={(navData) => (navData.isActive ? styles.active : "")}
           to={props.path}
         >
@@ -36,16 +23,15 @@ const CustomLink = (props) => {
 };
 
 const Header = () => {
-  const [isAuth, setIsAuth] = useState();
-  const isTokenAlive = getTokenHandler();
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const isAuth = !!user;
 
-  useEffect(() => {
-    setIsAuth(isTokenAlive);
-  }, [isTokenAlive]);
-
-  console.log(isAuth);
-
-  // const { isAuth } = useAuth();
+  const logoutHandler = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    dispatch(authActions.logout());
+  };
 
   return (
     <nav className={styles.header}>
@@ -55,7 +41,11 @@ const Header = () => {
       <ul className={styles["nav-links"]}>
         {!isAuth && <CustomLink path="/auth">Вход</CustomLink>}
         {isAuth && <CustomLink path="/profile">Профиль</CustomLink>}
-        {isAuth && <CustomLink path="/">Выход</CustomLink>}
+        {isAuth && (
+          <CustomLink path="/" onClick={logoutHandler}>
+            Выход
+          </CustomLink>
+        )}
       </ul>
     </nav>
   );

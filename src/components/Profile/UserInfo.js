@@ -1,9 +1,9 @@
 import styles from "./UserInfo.module.scss";
 
-const UserInfo = () => {
+const UserInfo = (props) => {
   return (
     <div className={styles["user-info"]}>
-      <p className={styles.title}>UserInfo</p>
+      <p className={styles.title}>Hello, {props.userName}!</p>
       <div>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim

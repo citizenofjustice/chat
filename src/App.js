@@ -1,19 +1,18 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import Layout from "./components/Layout/Layout";
 import AuthPage from "./components/pages/AuthPage";
 import ProfilePage from "./components/pages/ProfilePage";
 import HomePage from "./components/pages/HomePage";
-import { useAuth } from "./hooks/use-auth";
-import { getTokenHandler } from "./store/auth-slice";
 
 import "./styles/reset.module.scss";
 import "./styles/variables.module.scss";
 import styles from "./styles/app.module.scss";
 
 function App() {
-  const isTokenAlive = getTokenHandler();
-  // const { isAuth } = useAuth();
+  const user = useSelector((state) => state.auth.user);
+  const isAuth = !!user;
 
   return (
     <div className={styles.container}>
@@ -24,7 +23,7 @@ function App() {
           <Route
             path="/profile"
             element={
-              isTokenAlive ? <ProfilePage /> : <Navigate to="/" replace />
+              isAuth ? <ProfilePage /> : <Navigate to="/" replace />
               // </ProtectedRoutes>
             }
           ></Route>
