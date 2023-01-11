@@ -1,7 +1,13 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../hooks/use-auth";
 
-import { authActions } from "../../store/auth-slice";
+import {
+  authActions,
+  logoutUser,
+  getTokenHandler,
+} from "../../store/auth-slice";
 import Button from "../UI/Button";
 import styles from "./Header.module.scss";
 
@@ -10,6 +16,7 @@ const CustomLink = (props) => {
   const dispatch = useDispatch();
 
   const logoutHandler = () => {
+    logoutUser();
     dispatch(authActions.logout());
   };
 
@@ -29,7 +36,16 @@ const CustomLink = (props) => {
 };
 
 const Header = () => {
-  const isLoggedIn = useSelector((state) => state.auth.userIsLoggedIn);
+  const [isAuth, setIsAuth] = useState();
+  const isTokenAlive = getTokenHandler();
+
+  useEffect(() => {
+    setIsAuth(isTokenAlive);
+  }, [isTokenAlive]);
+
+  console.log(isAuth);
+
+  // const { isAuth } = useAuth();
 
   return (
     <nav className={styles.header}>
@@ -37,9 +53,9 @@ const Header = () => {
         <NavLink to="/">logo</NavLink>
       </div>
       <ul className={styles["nav-links"]}>
-        {!isLoggedIn && <CustomLink path="/auth">Вход</CustomLink>}
-        {isLoggedIn && <CustomLink path="/profile">Профиль</CustomLink>}
-        {isLoggedIn && <CustomLink path="/">Выход</CustomLink>}
+        {!isAuth && <CustomLink path="/auth">Вход</CustomLink>}
+        {isAuth && <CustomLink path="/profile">Профиль</CustomLink>}
+        {isAuth && <CustomLink path="/">Выход</CustomLink>}
       </ul>
     </nav>
   );
