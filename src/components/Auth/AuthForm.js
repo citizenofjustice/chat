@@ -1,27 +1,35 @@
 import { useRef, useState } from "react";
+
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { authActions } from "../../store/auth-slice";
+import { timerActions } from "../../store/timer-slice";
+
 import Button from "../UI/Button";
 import styles from "./AuthForm.module.scss";
-import { useDispatch } from "react-redux";
-import { authActions } from "../../store/auth-slice";
-import { useNavigate } from "react-router-dom";
 
 const AuthForm = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // state that stores auth form mode
   const [isLogin, setIsLogin] = useState(true);
   const emailInput = useRef();
   const passwordInput = useRef();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
+  // handling login/sing-in data submittion
   const submitHandler = (event) => {
     event.preventDefault();
     const enteredEmail = emailInput.current.value;
     const enteredPassword = passwordInput.current.value;
 
     let url;
+    // if user has an account
     if (isLogin) {
       url =
         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAr3wMeLPj8j_PmyxeoGF-nmAvltdSjdlQ";
     } else {
+      // if user wants to create account
       url =
         "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAr3wMeLPj8j_PmyxeoGF-nmAvltdSjdlQ";
     }
@@ -38,7 +46,6 @@ const AuthForm = () => {
     })
       .then((res) => {
         if (res.ok) {
-          // console.log("res.json()", res.json());
           return res.json();
         } else {
           res
@@ -57,11 +64,22 @@ const AuthForm = () => {
       })
       .then((data) => {
         if (data) {
-          localStorage.setItem("user", JSON.stringify(data.email));
-          localStorage.setItem("token", JSON.stringify(data.idToken));
-          dispatch(
-            authActions.login({ user: data.email, token: data.idToken })
-          );
+          // extracting data from request
+          const { email, idToken } = data;
+          // converting json into number and multiply to miliseconds value
+          const expiresIn = +data.expiresIn * 1000;
+          // calculating when will expire token
+          const expirationTime = new Date(new Date().getTime() + expiresIn);
+
+          // setting data into storage
+          localStorage.setItem("user", JSON.stringify(email));
+          localStorage.setItem("token", JSON.stringify(idToken));
+          localStorage.setItem("expirationTime", expirationTime.toISOString());
+
+          // performing redux actions for storing data
+          dispatch(authActions.login({ user: email, token: idToken }));
+          dispatch(timerActions.setTimer(expiresIn));
+          // load profile page
           navigate("/profile");
         }
       })
@@ -70,6 +88,7 @@ const AuthForm = () => {
       });
   };
 
+  // function for changing form auth mode
   const authModeHandler = () => {
     setIsLogin((prevState) => !prevState);
   };

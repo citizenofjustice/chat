@@ -1,6 +1,7 @@
 import RoundImage from "../UI/RoundImage";
-import styles from "./Avatar.module.scss";
+
 import Button from "../UI/Button";
+import styles from "./Avatar.module.scss";
 
 const Avatar = () => {
   return (

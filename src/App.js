@@ -11,6 +11,7 @@ import "./styles/variables.module.scss";
 import styles from "./styles/app.module.scss";
 
 function App() {
+  // checking if user is authenticated
   const user = useSelector((state) => state.auth.user);
   const isAuth = !!user;
 
@@ -22,10 +23,7 @@ function App() {
           <Route path="/auth" element={<AuthPage />}></Route>
           <Route
             path="/profile"
-            element={
-              isAuth ? <ProfilePage /> : <Navigate to="/" replace />
-              // </ProtectedRoutes>
-            }
+            element={isAuth ? <ProfilePage /> : <Navigate to="/" replace />}
           ></Route>
           <Route path="*" element={<p>There's nothing here: 404!</p>} />
         </Routes>
