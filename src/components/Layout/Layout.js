@@ -1,10 +1,13 @@
+import { Outlet } from "react-router-dom";
 import Header from "../Header/Header";
 
-const Layout = (props) => {
+const Layout = () => {
   return (
     <>
       <Header />
-      <main style={{ margin: "0 auto" }}>{props.children}</main>
+      <main style={{ margin: "0 auto" }}>
+        <Outlet />
+      </main>
     </>
   );
 };

@@ -3,7 +3,6 @@ import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { authActions } from "../../store/auth-slice";
-import { timerActions } from "../../store/timer-slice";
 
 import Button from "../UI/Button";
 import styles from "./AuthForm.module.scss";
@@ -65,11 +64,11 @@ const AuthForm = () => {
       .then((data) => {
         if (data) {
           // extracting data from request
-          const { email, idToken } = data;
+          const { email, idToken, expiresIn } = data;
           // converting json into number and multiply to miliseconds value
-          const expiresIn = +data.expiresIn * 1000;
+          const duration = +expiresIn * 1000;
           // calculating when will expire token
-          const expirationTime = new Date(new Date().getTime() + expiresIn);
+          const expirationTime = new Date(new Date().getTime() + duration);
 
           // setting data into storage
           localStorage.setItem("user", JSON.stringify(email));
@@ -78,7 +77,7 @@ const AuthForm = () => {
 
           // performing redux actions for storing data
           dispatch(authActions.login({ user: email, token: idToken }));
-          dispatch(timerActions.setTimer(expiresIn));
+
           // load profile page
           navigate("/profile");
         }

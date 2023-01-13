@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 import {
@@ -7,7 +7,6 @@ import {
   calcRemainingTime,
   retriveAuthStorageData,
 } from "../../store/auth-slice";
-import { timerActions } from "../../store/timer-slice";
 
 import Button from "../UI/Button";
 import styles from "./Header.module.scss";
@@ -20,7 +19,6 @@ const Header = () => {
   const storageData = retriveAuthStorageData();
 
   // getting timer data from redux
-  const time = useSelector((state) => state.timer);
   const dispatch = useDispatch();
 
   // function that handles user logout
@@ -33,7 +31,6 @@ const Header = () => {
     if (logoutTimer) {
       clearTimeout(logoutTimer);
       dispatch(authActions.logout());
-      dispatch(timerActions.clearTimer());
     }
   }, [dispatch]);
 
@@ -46,26 +43,23 @@ const Header = () => {
 
       const remainingTime = calcRemainingTime(expirationTime);
 
-      dispatch(timerActions.setTimer(remainingTime));
-
       logoutTimer = setTimeout(() => {
         logoutHandler();
       }, remainingTime);
     },
-    [dispatch, logoutHandler]
+    [logoutHandler]
   );
 
   // if we store auth data in localstorage set tokens lifespan
   useEffect(() => {
     if (storageData) {
-      const { timer } = time;
       const { user, token, duration } = storageData;
       const expirationTime = new Date(new Date().getTime() + duration);
       logoutTimer = setTimeout(() => {
         setLocalStorageHandler(user, token, expirationTime);
-      }, timer);
+      }, duration);
     }
-  }, [time, setLocalStorageHandler, storageData]);
+  }, [setLocalStorageHandler, storageData]);
 
   return (
     <nav className={styles.header}>

@@ -36,7 +36,7 @@
         font-size: $mainFontSize;
       }
       input:focus {
-        outline: 2px solid rgb(237, 200, 114);
+        outline: $inputOutline;
       }
     }
     .actions {

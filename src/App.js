@@ -5,6 +5,7 @@ import Layout from "./components/Layout/Layout";
 import AuthPage from "./components/pages/AuthPage";
 import ProfilePage from "./components/pages/ProfilePage";
 import HomePage from "./components/pages/HomePage";
+import EditProfile from "./components/Profile/EditProfile";
 
 import "./styles/reset.module.scss";
 import "./styles/variables.module.scss";
@@ -17,17 +18,19 @@ function App() {
 
   return (
     <div className={styles.container}>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<HomePage />}></Route>
-          <Route path="/auth" element={<AuthPage />}></Route>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />}></Route>
+          <Route path="auth" element={<AuthPage />} />
           <Route
-            path="/profile"
+            path="profile"
             element={isAuth ? <ProfilePage /> : <Navigate to="/" replace />}
-          ></Route>
+          >
+            <Route path="edit-profile" element={<EditProfile />} />
+          </Route>
           <Route path="*" element={<p>There's nothing here: 404!</p>} />
-        </Routes>
-      </Layout>
+        </Route>
+      </Routes>
     </div>
   );
 }
