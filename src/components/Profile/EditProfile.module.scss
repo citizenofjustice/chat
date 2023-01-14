@@ -25,7 +25,7 @@
         margin: 0 1rem;
         border: none;
         border-radius: 0.3125rem;
-        padding: 0.5rem;
+
         background-color: rgb(199, 255, 199);
         color: $inputTextColor;
         font-weight: bold;
@@ -35,17 +35,18 @@
       input:focus {
         outline: $inputOutline;
       }
-      .button {
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 10px;
-        background-color: $controlsBackColor;
-        border: 2px solid $controlsBorderColor;
-        color: $inputTextColor;
-        font-weight: bold;
-      }
     }
   }
+}
+.button {
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: $controlsBackColor;
+  border: 2px solid $controlsBorderColor;
+  color: $inputTextColor;
+  font-weight: bold;
 }

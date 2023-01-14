@@ -79,7 +79,8 @@ const AuthForm = () => {
           dispatch(authActions.login({ user: email, token: idToken }));
 
           // load profile page
-          navigate("/profile");
+
+          isLogin ? navigate("/profile") : navigate("/profile/settings");
         }
       })
       .catch((err) => {
