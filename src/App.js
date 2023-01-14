@@ -5,7 +5,7 @@ import Layout from "./components/Layout/Layout";
 import AuthPage from "./components/pages/AuthPage";
 import ProfilePage from "./components/pages/ProfilePage";
 import HomePage from "./components/pages/HomePage";
-import ProfileSettingsPage from "./components/pages/ProfileSettingsPage";
+import InitialSettingsPage from "./components/pages/InitialSettingsPage";
 import EditProfile from "./components/Profile/EditProfile";
 
 import "./styles/reset.module.scss";
@@ -29,7 +29,7 @@ function App() {
           >
             <Route path="edit-profile" element={<EditProfile />} />
           </Route>
-          <Route path="profile/settings" element={<ProfileSettingsPage />} />
+          <Route path="profile/settings" element={<InitialSettingsPage />} />
           <Route path="*" element={<p>There's nothing here: 404!</p>} />
         </Route>
       </Routes>

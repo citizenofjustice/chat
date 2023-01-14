@@ -1,8 +1,10 @@
 import { useRef, useState } from "react";
 
-import { useDispatch } from "react-redux";
+import { useDispatch /*, useSelector*/ } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { authActions } from "../../store/auth-slice";
+// import { nicknameActions } from "../../store/nickname-slice";
+// import useAuth from "../../hooks/use-auth";
 
 import Button from "../UI/Button";
 import styles from "./AuthForm.module.scss";
@@ -10,11 +12,21 @@ import styles from "./AuthForm.module.scss";
 const AuthForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // const nickname = useSelector((state) => state.nick.nick);
 
   // state that stores auth form mode
   const [isLogin, setIsLogin] = useState(true);
   const emailInput = useRef();
   const passwordInput = useRef();
+  // const { getUserInfo } = useAuth();
+
+  // const getNickname = (token) => {
+  //   if (nickname === null) {
+  //     console.log("nickname");
+  //     const userInfo = getUserInfo(token);
+  //     console.log(userInfo);
+  //   } else return null;
+  // };
 
   // handling login/sing-in data submittion
   const submitHandler = (event) => {
@@ -78,8 +90,10 @@ const AuthForm = () => {
           // performing redux actions for storing data
           dispatch(authActions.login({ user: email, token: idToken }));
 
-          // load profile page
+          // const userInfo = getUserInfo(idToken);
+          // console.log(userInfo);
 
+          // load profile page
           isLogin ? navigate("/profile") : navigate("/profile/settings");
         }
       })

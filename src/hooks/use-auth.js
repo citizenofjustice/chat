@@ -149,7 +149,7 @@ const useAuth = () => {
     const getUserInfoUrl =
       "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyAr3wMeLPj8j_PmyxeoGF-nmAvltdSjdlQ";
 
-    fetch(getUserInfoUrl, {
+    const result = fetch(getUserInfoUrl, {
       method: "POST",
       body: JSON.stringify({
         idToken: idToken,
@@ -176,10 +176,13 @@ const useAuth = () => {
       })
       .then((data) => {
         console.log(data);
+        return data;
       })
       .catch((err) => {
         throw new Error(err.message);
       });
+
+    return result;
   };
 
   return {
