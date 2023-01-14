@@ -33,9 +33,7 @@ const useAuth = () => {
             .catch((err) => alert(err.message));
         }
       })
-      .then((data) => {
-        console.log(data);
-      })
+      .then()
       .catch((err) => {
         throw new Error(err.message);
       });
@@ -75,7 +73,6 @@ const useAuth = () => {
         }
       })
       .then((data) => {
-        console.log(data);
         // extracting data from request
         const { email, idToken, expiresIn } = data;
         // converting json into number and multiply to miliseconds value
@@ -175,7 +172,6 @@ const useAuth = () => {
         }
       })
       .then((data) => {
-        console.log(data);
         return data;
       })
       .catch((err) => {
@@ -185,7 +181,54 @@ const useAuth = () => {
     return result;
   };
 
+  const getNickname = async (nickname, token) => {
+    if (nickname === null) {
+      const userInfo = await getUserInfo(token);
+      const nick = userInfo.users[0].displayName;
+      return nick;
+    } else return nickname;
+  };
+
+  const authUser = async (isLogin, enteredEmail, enteredPassword) => {
+    let url;
+    // if user has an account
+    if (isLogin) {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAr3wMeLPj8j_PmyxeoGF-nmAvltdSjdlQ";
+    } else {
+      // if user wants to create account
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAr3wMeLPj8j_PmyxeoGF-nmAvltdSjdlQ";
+    }
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          email: enteredEmail,
+          password: enteredPassword,
+          returnSecureToken: true,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        let errorMessage = "Authentication failed!";
+        if (data && data.error && data.error.message) {
+          errorMessage = data.error.message;
+        }
+        throw new Error(errorMessage);
+      }
+      return data;
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   return {
+    authUser,
+    getNickname,
     changeNickname,
     changeUsername,
     changePassword,

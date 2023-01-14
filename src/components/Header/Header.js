@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 import {
@@ -18,8 +18,9 @@ let logoutTimer;
 const Header = () => {
   // getting data from localStorage
   const storageData = retriveAuthStorageData();
-
-  // getting timer data from redux
+  // const nick = useSelector((state) => state.nick.nick);
+  const isAuth = !!storageData;
+  // const hasNickname = !isAuth && !nick;
   const dispatch = useDispatch();
 
   // function that handles user logout
@@ -69,9 +70,10 @@ const Header = () => {
         <NavLink to="/">logo</NavLink>
       </div>
       <ul className={styles["nav-links"]}>
-        {!storageData && <CustomLink path="/auth">Вход</CustomLink>}
-        {!!storageData && <CustomLink path="/profile">Профиль</CustomLink>}
-        {!!storageData && (
+        {!isAuth && <CustomLink path="/auth">Вход</CustomLink>}
+        {isAuth && <CustomLink path="/profile">Профиль</CustomLink>}
+        {/* <CustomLink path="/profile/settings">Инициализация</CustomLink> */}
+        {isAuth && (
           <CustomLink path="/" onClick={logoutHandler}>
             Выход
           </CustomLink>

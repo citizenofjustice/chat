@@ -13,6 +13,7 @@ const InitialSettingsPage = () => {
   const saveNicknameHandler = () => {
     const enteredNickname = nicknameInput.current.value;
     changeNickname(currentIdToken, enteredNickname);
+    localStorage.setItem("nick", enteredNickname);
     dispatch(nicknameActions.setNickname({ nick: enteredNickname }));
     nicknameInput.current.value = "";
   };

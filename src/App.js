@@ -15,7 +15,8 @@ import styles from "./styles/app.module.scss";
 function App() {
   // checking if user is authenticated
   const user = useSelector((state) => state.auth.user);
-  const isAuth = !!user;
+  const nick = useSelector((state) => state.nick.nick);
+  const isAuth = !!user && !!nick;
 
   return (
     <div className={styles.container}>
@@ -29,7 +30,9 @@ function App() {
           >
             <Route path="edit-profile" element={<EditProfile />} />
           </Route>
-          <Route path="profile/settings" element={<InitialSettingsPage />} />
+          {!nick && (
+            <Route path="profile/settings" element={<InitialSettingsPage />} />
+          )}
           <Route path="*" element={<p>There's nothing here: 404!</p>} />
         </Route>
       </Routes>
