@@ -7,7 +7,7 @@ import styles from "./Avatar.module.scss";
 import { useSelector } from "react-redux";
 import useFirebase from "../../hooks/use-firebase";
 
-const Avatar = () => {
+const Avatar = (props) => {
   const { changeProfilePic, getNewestProfilePicUrl } = useFirebase();
   const user = useSelector((state) => state.auth.user);
   const [imageUpload, setImageUpload] = useState(null);
@@ -33,6 +33,10 @@ const Avatar = () => {
     setProfilePic(imageUrl);
   };
 
+  const canelUploadHandler = () => {
+    setImageUpload(null);
+  };
+
   useEffect(() => {
     fetchProfilePic();
   }, [fetchProfilePic]);
@@ -40,14 +44,30 @@ const Avatar = () => {
   return (
     <>
       <div className={styles.avatar}>
-        <RoundImage profilePic={profilePic} alt="profile image" />
+        <RoundImage
+          size={props.page}
+          profilePic={profilePic}
+          alt="profile image"
+        />
         <div className={styles.file}>
-          <label
-            className={`${styles.button} ${styles["image-upload-custom"]}`}
-            htmlFor="image-upload"
-          >
-            Загрузить файл
-          </label>
+          <div className={styles.upload}>
+            <label
+              className={`${styles.button} ${
+                !!imageUpload && styles.highlight
+              }`}
+              htmlFor="image-upload"
+            >
+              {!imageUpload ? "Загрузить" : "Загружено"}
+            </label>
+            {!!imageUpload && (
+              <span
+                className={`${styles.cancel} ${styles.button}`}
+                onClick={canelUploadHandler}
+              >
+                x
+              </span>
+            )}
+          </div>
           <input
             id="image-upload"
             type="file"
@@ -56,7 +76,7 @@ const Avatar = () => {
             }}
           />
           <span className={styles.button} onClick={uploadImageHandler}>
-            SEND
+            Отправить
           </span>
         </div>
       </div>

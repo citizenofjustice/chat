@@ -17,7 +17,7 @@ const Profile = () => {
   const user = useSelector((state) => state.auth.user);
   return (
     <section className={styles.profile}>
-      <Avatar />
+      <Avatar page="profile-pic" />
       <UserInfo userName={user} />
       <span onClick={editLinkChangeHandler}>
         {isEdit && <Link to="edit-profile">Edit</Link>}

@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import Layout from "./components/Layout/Layout";
@@ -7,6 +7,7 @@ import ProfilePage from "./components/pages/ProfilePage";
 import HomePage from "./components/pages/HomePage";
 import InitialSettingsPage from "./components/pages/InitialSettingsPage";
 import EditProfile from "./components/Profile/EditProfile";
+import ProtectedRoutes from "./ProtectedRoutes";
 
 import "./styles/reset.module.scss";
 import "./styles/variables.module.scss";
@@ -16,7 +17,10 @@ function App() {
   // checking if user is authenticated
   const user = useSelector((state) => state.auth.user);
   const nick = useSelector((state) => state.nick.nick);
-  const isAuth = !!user && !!nick;
+  const isAuth = !!user;
+
+  console.log("user", user);
+  console.log("isAuth", isAuth);
 
   return (
     <div className={styles.container}>
@@ -26,13 +30,15 @@ function App() {
           <Route path="auth" element={<AuthPage />} />
           <Route
             path="profile"
-            element={isAuth ? <ProfilePage /> : <Navigate to="/" replace />}
+            element={
+              <ProtectedRoutes allowed={isAuth} path="/auth">
+                {nick && <ProfilePage />}
+                {!nick && <InitialSettingsPage />}
+              </ProtectedRoutes>
+            }
           >
             <Route path="edit-profile" element={<EditProfile />} />
           </Route>
-          {!nick && (
-            <Route path="profile/settings" element={<InitialSettingsPage />} />
-          )}
           <Route path="*" element={<p>There's nothing here: 404!</p>} />
         </Route>
       </Routes>

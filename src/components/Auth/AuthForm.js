@@ -48,13 +48,11 @@ const AuthForm = () => {
         const fetchedNick = await getNickname(nickname, idToken);
 
         // loading certain page if user already set nickname
-        if (fetchedNick === undefined) {
-          navigate("/profile/settings");
-        } else {
+        if (fetchedNick !== undefined) {
           localStorage.setItem("nick", fetchedNick);
           dispatch(nicknameActions.setNickname({ nick: fetchedNick }));
-          navigate("/profile");
         }
+        navigate("/profile");
       }
     } catch (error) {
       throw new Error(error.message);

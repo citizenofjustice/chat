@@ -1,0 +1,16 @@
+.initial {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .initial-info {
+    width: 100%;
+    margin-top: 1rem;
+    .nickname {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+    }
+  }
+}
