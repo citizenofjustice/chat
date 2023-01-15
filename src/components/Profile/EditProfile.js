@@ -1,10 +1,8 @@
 import { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useAuth from "../../hooks/use-auth";
-import useFirebase from "../../hooks/use-firebase";
+import { nicknameActions } from "../../store/nickname-slice";
 import styles from "./EditProfile.module.scss";
-import storage from "../../firebase";
-import { ref } from "firebase/storage";
 
 const EditProfile = () => {
   const changeNicknameInput = useRef();
@@ -15,7 +13,6 @@ const EditProfile = () => {
   const dispatch = useDispatch();
   const { getUserInfo, changeNickname, changeUsername, changePassword } =
     useAuth();
-  const { getCurrentPicPath, moveFirebaseFile } = useFirebase();
 
   const getDataHandler = () => {
     getUserInfo(currentIdToken);
@@ -23,26 +20,16 @@ const EditProfile = () => {
 
   const changeNicknameHandler = () => {
     const enteredNick = changeNicknameInput.current.value;
+    dispatch(nicknameActions.setNickname({ nick: enteredNick }));
+    localStorage.setItem("nick", enteredNick);
     changeNickname(currentIdToken, enteredNick);
     changeNicknameInput.current.value = "";
   };
 
   const changeUsernameHandler = async () => {
     const enteredUsername = changeUsernameInput.current.value;
-    const currentFolderRef = ref(
-      storage,
-      `${currentUsername}/profile-picture/`
-    );
-    const currentFilePath = await getCurrentPicPath(currentFolderRef);
-    console.log(currentFilePath);
-    // const wantedFilePath = ref(
-    //   storage,
-    //   `${enteredUsername}/profile-picture/${currentFilePath.name}`
-    // );
-    const wantedFilePath = `${enteredUsername}/profile-picture/${currentFilePath.name}`;
     if (currentUsername !== enteredUsername) {
       changeUsername(currentIdToken, enteredUsername, dispatch);
-      moveFirebaseFile(currentFilePath, wantedFilePath);
     } else {
       alert("Введенный логин/почта совпадает с текущим.");
     }

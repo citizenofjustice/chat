@@ -12,15 +12,20 @@ import useAuth from "../../hooks/use-auth";
 const Avatar = (props) => {
   const { changeProfilePicUrl, getUserInfo } = useAuth();
   const { uploadProfilePic } = useFirebase();
-  const user = useSelector((state) => state.auth.user);
   const idToken = useSelector((state) => state.auth.token);
   const [imageUpload, setImageUpload] = useState(null);
   const [profilePic, setProfilePic] = useState();
-  const profilePicFolderRef = ref(storage, `${user}/profile-picture/`);
+  const [userFirebaseId, setUserFirebaseId] = useState(null);
+  const profilePicFolderRef = ref(
+    storage,
+    `${userFirebaseId}/profile-picture/`
+  );
 
   const fetchProfilePic = useCallback(async () => {
     const userInfo = await getUserInfo(idToken);
     const pic = userInfo.users[0].photoUrl;
+    const userId = userInfo.users[0].localId;
+    setUserFirebaseId(userId);
     if (pic === undefined) {
       setProfilePic(defaultAvatar);
     } else setProfilePic(pic);
@@ -30,7 +35,7 @@ const Avatar = (props) => {
     if (imageUpload === null) return;
     const imageRef = ref(
       storage,
-      `${user}/profile-picture/${imageUpload.name}`
+      `${userFirebaseId}/profile-picture/${imageUpload.name}`
     );
     const imageUrl = await uploadProfilePic(
       imageRef,

@@ -157,6 +157,7 @@ const useAuth = () => {
         },
       });
       const data = await response.json();
+      console.log(data);
       if (!response.ok) {
         let errorMessage = "User info change has failed!";
         if (data && data.error && data.error.message) {
