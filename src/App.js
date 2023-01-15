@@ -19,9 +19,6 @@ function App() {
   const nick = useSelector((state) => state.nick.nick);
   const isAuth = !!user;
 
-  console.log("user", user);
-  console.log("isAuth", isAuth);
-
   return (
     <div className={styles.container}>
       <Routes>

@@ -142,44 +142,32 @@ const useAuth = () => {
       });
   };
 
-  const getUserInfo = (idToken) => {
+  const getUserInfo = async (idToken) => {
     const getUserInfoUrl =
       "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyAr3wMeLPj8j_PmyxeoGF-nmAvltdSjdlQ";
 
-    const result = fetch(getUserInfoUrl, {
-      method: "POST",
-      body: JSON.stringify({
-        idToken: idToken,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          res
-            .json()
-            .then((data) => {
-              let errorMessage = "User info change has failed!";
-              if (data && data.error && data.error.message) {
-                errorMessage = data.error.message;
-              }
-              throw new Error(errorMessage);
-            })
-            .catch((err) => alert(err.message));
-        }
-      })
-      .then((data) => {
-        console.log(data);
-        return data;
-      })
-      .catch((err) => {
-        throw new Error(err.message);
+    try {
+      const response = await fetch(getUserInfoUrl, {
+        method: "POST",
+        body: JSON.stringify({
+          idToken: idToken,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-
-    return result;
+      const data = await response.json();
+      if (!response.ok) {
+        let errorMessage = "User info change has failed!";
+        if (data && data.error && data.error.message) {
+          errorMessage = data.error.message;
+        }
+        throw new Error(errorMessage);
+      }
+      return data;
+    } catch (error) {
+      throw new Error("User info change has failed!", error);
+    }
   };
 
   const getNickname = async (nickname, token) => {
@@ -188,6 +176,36 @@ const useAuth = () => {
       const nick = userInfo.users[0].displayName;
       return nick;
     } else return nickname;
+  };
+
+  const changeProfilePicUrl = async (idToken, chosenPic) => {
+    const updateUserInfoUrl =
+      "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAr3wMeLPj8j_PmyxeoGF-nmAvltdSjdlQ";
+
+    try {
+      const response = await fetch(updateUserInfoUrl, {
+        method: "POST",
+        body: JSON.stringify({
+          idToken: idToken,
+          photoUrl: chosenPic !== null ? chosenPic : null,
+          deleteAttribute: chosenPic === null ? "PHOTO_URL" : null,
+          returnSecureToken: false,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        let errorMessage = "Profile picture change failed!";
+        if (data && data.error && data.error.message) {
+          errorMessage = data.error.message;
+        }
+        throw new Error(errorMessage);
+      }
+    } catch (error) {
+      throw new Error("Profile picture change failed! ", error);
+    }
   };
 
   const authUser = async (isLogin, enteredEmail, enteredPassword) => {
@@ -231,6 +249,7 @@ const useAuth = () => {
     authUser,
     getNickname,
     changeNickname,
+    changeProfilePicUrl,
     changeUsername,
     changePassword,
     getUserInfo,
