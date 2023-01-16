@@ -1,14 +1,15 @@
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+
 import Avatar from "./Avatar";
 import UserInfo from "./UserInfo";
-
 import styles from "./Profile.module.scss";
-import { useEffect, useState } from "react";
 
 const Profile = () => {
-  const [isEdit, setIsEdit] = useState(false);
   const navigate = useNavigate();
+
+  const [isEdit, setIsEdit] = useState(false);
 
   const editLinkChangeHandler = () => {
     setIsEdit((prevState) => !prevState);

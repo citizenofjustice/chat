@@ -1,80 +1,91 @@
 import { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import useAuth from "../../hooks/use-auth";
-import { nicknameActions } from "../../store/nickname-slice";
+
+import {
+  getUserInfo,
+  changeUsername,
+  changePassword,
+  updateProfile,
+} from "../../store/auth-slice";
+
+import ErrorModal from "../UI/ErrorModal";
 import styles from "./EditProfile.module.scss";
 
 const EditProfile = () => {
+  const dispatch = useDispatch();
+
+  const { user, token, status, error } = useSelector((state) => state.auth);
+
   const changeNicknameInput = useRef();
   const changeUsernameInput = useRef();
   const changePasswordInput = useRef();
-  const currentIdToken = useSelector((state) => state.auth.token);
-  const currentUsername = useSelector((state) => state.auth.user);
-  const dispatch = useDispatch();
-  const { getUserInfo, changeNickname, changeUsername, changePassword } =
-    useAuth();
 
   const getDataHandler = () => {
-    getUserInfo(currentIdToken);
+    dispatch(getUserInfo(token));
   };
 
   const changeNicknameHandler = () => {
     const enteredNick = changeNicknameInput.current.value;
-    dispatch(nicknameActions.setNickname({ nick: enteredNick }));
-    localStorage.setItem("nick", enteredNick);
-    changeNickname(currentIdToken, enteredNick);
+    dispatch(updateProfile({ type: "nickname", token, newValue: enteredNick }));
     changeNicknameInput.current.value = "";
   };
 
   const changeUsernameHandler = async () => {
     const enteredUsername = changeUsernameInput.current.value;
-    if (currentUsername !== enteredUsername) {
-      changeUsername(currentIdToken, enteredUsername, dispatch);
+    if (user !== enteredUsername) {
+      dispatch(changeUsername({ token, enteredUsername }));
+      changeUsernameInput.current.value = "";
     } else {
       alert("Введенный логин/почта совпадает с текущим.");
     }
-    changeUsernameInput.current.value = "";
   };
 
   const changePasswordHandler = () => {
     const enteredPassword = changePasswordInput.current.value;
-    changePassword(currentIdToken, enteredPassword, dispatch);
+    dispatch(changePassword({ token, enteredPassword }));
     changePasswordInput.current.value = "";
   };
 
   return (
-    <section className={styles["edit-form"]}>
-      <form className={styles.form}>
-        <div className={styles.changes}>
-          <label htmlFor="nickname-change">Никнейм:</label>
-          <input ref={changeNicknameInput} type="text" id="nickname-change" />
-          <span className={styles.button} onClick={changeNicknameHandler}>
-            Поменять
+    <ErrorModal isActive={status === "rejected"} errorMessage={error}>
+      <section className={styles["edit-form"]}>
+        <form className={styles.form}>
+          <div className={styles.changes}>
+            <label htmlFor="nickname-change">Никнейм:</label>
+            <input ref={changeNicknameInput} type="text" id="nickname-change" />
+            <span className={styles.button} onClick={changeNicknameHandler}>
+              Поменять
+            </span>
+          </div>
+          <div className={styles.changes}>
+            <label htmlFor="username-change">Почта/Логин:</label>
+            <input
+              ref={changeUsernameInput}
+              type="email"
+              id="username-change"
+            />
+            <span className={styles.button} onClick={changeUsernameHandler}>
+              Поменять
+            </span>
+          </div>
+          <div className={styles.changes}>
+            <label htmlFor="password-change">Пароль: </label>
+            <input
+              ref={changePasswordInput}
+              type="password"
+              id="password-change"
+            />
+            <span className={styles.button} onClick={changePasswordHandler}>
+              Поменять
+            </span>
+          </div>
+          <span className={styles.button} onClick={getDataHandler}>
+            Получить данные
           </span>
-        </div>
-        <div className={styles.changes}>
-          <label htmlFor="username-change">Почта/Логин:</label>
-          <input ref={changeUsernameInput} type="email" id="username-change" />
-          <span className={styles.button} onClick={changeUsernameHandler}>
-            Поменять
-          </span>
-        </div>
-        <div className={styles.changes}>
-          <label htmlFor="password-change">Пароль: </label>
-          <input
-            ref={changePasswordInput}
-            type="password"
-            id="password-change"
-          />
-          <span className={styles.button} onClick={changePasswordHandler}>
-            Поменять
-          </span>
-        </div>
-        <span className={styles.button} onClick={getDataHandler}>
-          Получить данные
-        </span>
-      </form>
-    </section>
+          {status === "pending" && <h2>Loading...</h2>}
+        </form>
+      </section>
+    </ErrorModal>
   );
 };
 export default EditProfile;

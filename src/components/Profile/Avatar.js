@@ -1,50 +1,52 @@
 import { useCallback, useEffect, useState } from "react";
-import storage from "../../firebase";
+import { useDispatch, useSelector } from "react-redux";
 import { ref } from "firebase/storage";
+import storage from "../../firebase";
 
-import RoundImage from "../UI/RoundImage";
-import styles from "./Avatar.module.scss";
-import defaultAvatar from "../../assets/placeholderAvatar.png";
-import { useSelector } from "react-redux";
+import { getUserInfo, updateProfile } from "../../store/auth-slice";
 import useFirebase from "../../hooks/use-firebase";
-import useAuth from "../../hooks/use-auth";
+
+import defaultAvatar from "../../assets/placeholderAvatar.png";
+import RoundImage from "../UI/RoundImage";
+import LoadingSpinner from "../UI/LoadingSpinner";
+import ErrorModal from "../UI/ErrorModal";
+import styles from "./Avatar.module.scss";
 
 const Avatar = (props) => {
-  const { changeProfilePicUrl, getUserInfo } = useAuth();
+  const dispatch = useDispatch();
   const { uploadProfilePic } = useFirebase();
-  const idToken = useSelector((state) => state.auth.token);
+
+  const { userData, token, status, error } = useSelector((state) => state.auth);
+  const { localId, photoUrl } = userData;
+
   const [imageUpload, setImageUpload] = useState(null);
-  const [profilePic, setProfilePic] = useState();
-  const [userFirebaseId, setUserFirebaseId] = useState(null);
-  const profilePicFolderRef = ref(
-    storage,
-    `${userFirebaseId}/profile-picture/`
-  );
+  const [profilePic, setProfilePic] = useState(null);
+
+  const profilePicFolderRef = ref(storage, `${localId}/profile-picture/`);
 
   const fetchProfilePic = useCallback(async () => {
-    const userInfo = await getUserInfo(idToken);
-    const pic = userInfo.users[0].photoUrl;
-    const userId = userInfo.users[0].localId;
-    setUserFirebaseId(userId);
-    if (pic === undefined) {
+    dispatch(getUserInfo(token));
+    if (photoUrl === undefined) {
       setProfilePic(defaultAvatar);
-    } else setProfilePic(pic);
-  }, [getUserInfo, idToken]);
+    } else setProfilePic(photoUrl);
+  }, [photoUrl, dispatch, token]);
 
   const uploadImageHandler = async () => {
     if (imageUpload === null) return;
     const imageRef = ref(
       storage,
-      `${userFirebaseId}/profile-picture/${imageUpload.name}`
+      `${localId}/profile-picture/${imageUpload.name}`
     );
     const imageUrl = await uploadProfilePic(
       imageRef,
       imageUpload,
       profilePicFolderRef
     );
-    await changeProfilePicUrl(idToken, imageUrl);
-    setProfilePic(imageUrl);
     setImageUpload(null);
+    dispatch(
+      updateProfile({ type: "profilePicture", token, newValue: imageUrl })
+    );
+    setProfilePic(imageUrl);
   };
 
   const canelUploadHandler = () => {
@@ -56,45 +58,49 @@ const Avatar = (props) => {
   }, [fetchProfilePic]);
 
   return (
-    <>
-      <div className={styles.avatar}>
-        <RoundImage
-          size={props.page}
-          profilePic={profilePic}
-          alt="profile image"
-        />
-        <div className={styles.file}>
-          <div className={styles.upload}>
-            <label
-              className={`${styles.button} ${
-                !!imageUpload && styles.highlight
-              }`}
-              htmlFor="image-upload"
-            >
-              {!imageUpload ? "Загрузить" : "Загружено"}
-            </label>
-            {!!imageUpload && (
-              <span
-                className={`${styles.cancel} ${styles.button}`}
-                onClick={canelUploadHandler}
-              >
-                x
-              </span>
-            )}
-          </div>
-          <input
-            id="image-upload"
-            type="file"
-            onChange={(event) => {
-              setImageUpload(event.target.files[0]);
-            }}
+    <ErrorModal isActive={status === "rejected"} errorMessage={error}>
+      {status === "pending" ? (
+        <LoadingSpinner />
+      ) : (
+        <div className={styles.avatar}>
+          <RoundImage
+            size={props.page}
+            profilePic={profilePic}
+            alt="profile image"
           />
-          <span className={styles.button} onClick={uploadImageHandler}>
-            Отправить
-          </span>
+          <div className={styles.file}>
+            <div className={styles.upload}>
+              <label
+                className={`${styles.button} ${
+                  !!imageUpload && styles.highlight
+                }`}
+                htmlFor="image-upload"
+              >
+                {!imageUpload ? "Выбрать файл" : "Файл другой файл"}
+              </label>
+              {!!imageUpload && (
+                <span
+                  className={`${styles.cancel} ${styles.button}`}
+                  onClick={canelUploadHandler}
+                >
+                  x
+                </span>
+              )}
+            </div>
+            <input
+              id="image-upload"
+              type="file"
+              onChange={(event) => {
+                setImageUpload(event.target.files[0]);
+              }}
+            />
+            <span className={styles.button} onClick={uploadImageHandler}>
+              Загрузить
+            </span>
+          </div>
         </div>
-      </div>
-    </>
+      )}
+    </ErrorModal>
   );
 };
 

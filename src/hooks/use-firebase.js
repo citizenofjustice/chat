@@ -30,17 +30,6 @@ const useFirebase = () => {
     }
   };
 
-  // const getCurrentPicPath = async (folderRef) => {
-  //   const fileList = await listAll(folderRef);
-  //   const newestProfilePic = fileList.items.pop();
-  //   if (newestProfilePic) {
-  //     // const url = await getDownloadURL(newestProfilePic);
-  //     console.log(newestProfilePic);
-  //     return newestProfilePic;
-  //   } else return null;
-  //   // await deleteOldProfilePics(folderRef);
-  // };
-
   return {
     uploadProfilePic,
     deleteOldProfilePics,

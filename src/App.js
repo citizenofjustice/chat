@@ -15,9 +15,10 @@ import styles from "./styles/app.module.scss";
 
 function App() {
   // checking if user is authenticated
-  const user = useSelector((state) => state.auth.user);
-  const nick = useSelector((state) => state.nick.nick);
-  const isAuth = !!user;
+  const { user, userData } = useSelector((state) => state.auth);
+  const isAuth = user !== null;
+  const nick = userData.displayName;
+  const hasNick = nick !== undefined;
 
   return (
     <div className={styles.container}>
@@ -29,8 +30,8 @@ function App() {
             path="profile"
             element={
               <ProtectedRoutes allowed={isAuth} path="/auth">
-                {nick && <ProfilePage />}
-                {!nick && <InitialSettingsPage />}
+                {hasNick && <ProfilePage />}
+                {!hasNick && <InitialSettingsPage />}
               </ProtectedRoutes>
             }
           >

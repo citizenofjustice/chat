@@ -7,7 +7,6 @@ import {
   calcRemainingTime,
   retriveAuthStorageData,
 } from "../../store/auth-slice";
-import { nicknameActions } from "../../store/nickname-slice";
 
 import Button from "../UI/Button";
 import styles from "./Header.module.scss";
@@ -31,7 +30,6 @@ const Header = () => {
     if (logoutTimer) {
       clearTimeout(logoutTimer);
       dispatch(authActions.logout());
-      dispatch(nicknameActions.clearNickname());
     }
   }, [dispatch]);
 
