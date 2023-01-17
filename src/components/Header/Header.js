@@ -1,12 +1,9 @@
 import { useCallback, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
-import {
-  authActions,
-  calcRemainingTime,
-  retriveAuthStorageData,
-} from "../../store/auth-slice";
+import { authActions, calcRemainingTime } from "../../store/auth-slice";
+import { userInfoActions } from "../../store/userInfo-slice";
 
 import Button from "../UI/Button";
 import styles from "./Header.module.scss";
@@ -16,49 +13,31 @@ let logoutTimer;
 
 const Header = () => {
   // getting data from localStorage
-  const storageData = retriveAuthStorageData();
-  const isAuth = !!storageData;
+  const { user, expirationTime } = useSelector((state) => state.auth);
+  // const storageData = retriveAuthStorageData();
+  const isAuth = !!user;
   const dispatch = useDispatch();
 
   // function that handles user logout
   const logoutHandler = useCallback(() => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    localStorage.removeItem("expirationTime");
-
     // if timer exist clear it
     if (logoutTimer) {
       clearTimeout(logoutTimer);
       dispatch(authActions.logout());
+      dispatch(userInfoActions.clearUserInfo());
     }
   }, [dispatch]);
 
-  // function that updates local storage
-  const setLocalStorageHandler = useCallback(
-    (user, token, expirationTime) => {
-      localStorage.setItem("user", user);
-      localStorage.setItem("token", token);
-      localStorage.setItem("expirationTime", expirationTime);
-
-      const remainingTime = calcRemainingTime(expirationTime);
-
+  useEffect(() => {
+    console.log(expirationTime);
+    if (!!expirationTime) {
+      const duration = calcRemainingTime(expirationTime);
+      clearTimeout(logoutTimer);
       logoutTimer = setTimeout(() => {
         logoutHandler();
-      }, remainingTime);
-    },
-    [logoutHandler]
-  );
-
-  // if we store auth data in localstorage set tokens lifespan
-  useEffect(() => {
-    if (storageData) {
-      const { user, token, duration } = storageData;
-      const expirationTime = new Date(new Date().getTime() + duration);
-      logoutTimer = setTimeout(() => {
-        setLocalStorageHandler(user, token, expirationTime);
       }, duration);
     }
-  }, [setLocalStorageHandler, storageData]);
+  }, [expirationTime, logoutHandler]);
 
   return (
     <nav className={styles.header}>

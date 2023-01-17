@@ -1,15 +1,16 @@
 import { useDispatch } from "react-redux";
 
-import { authActions } from "../../store/auth-slice";
-
 import errorSVG from "../../assets/errorIcon.svg";
 import styles from "./ErrorModal.module.scss";
+import { authActions } from "../../store/auth-slice";
+import { userInfoActions } from "../../store/userInfo-slice";
 
 const ErrorModal = (props) => {
   const dispatch = useDispatch();
 
   const closeErrorHandler = () => {
     dispatch(authActions.closeError());
+    dispatch(userInfoActions.closeError());
   };
 
   return (

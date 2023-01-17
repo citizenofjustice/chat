@@ -6,7 +6,7 @@ import {
   changeUsername,
   changePassword,
   updateProfile,
-} from "../../store/auth-slice";
+} from "../../store/userInfo-slice";
 
 import ErrorModal from "../UI/ErrorModal";
 import styles from "./EditProfile.module.scss";

@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { updateProfile } from "../../store/auth-slice";
+import { updateProfile } from "../../store/userInfo-slice";
 
 import Avatar from "../Profile/Avatar";
 import ErrorModal from "../UI/ErrorModal";

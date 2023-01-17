@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ref } from "firebase/storage";
 import storage from "../../firebase";
 
-import { getUserInfo, updateProfile } from "../../store/auth-slice";
+import { getUserInfo, updateProfile } from "../../store/userInfo-slice";
 import useFirebase from "../../hooks/use-firebase";
 
 import defaultAvatar from "../../assets/placeholderAvatar.png";
@@ -16,7 +16,8 @@ const Avatar = (props) => {
   const dispatch = useDispatch();
   const { uploadProfilePic } = useFirebase();
 
-  const { userData, token, status, error } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
+  const { userData, status, error } = useSelector((state) => state.userInfo);
   const { localId, photoUrl } = userData;
 
   const [imageUpload, setImageUpload] = useState(null);

@@ -15,7 +15,8 @@ import styles from "./styles/app.module.scss";
 
 function App() {
   // checking if user is authenticated
-  const { user, userData } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
+  const { userData } = useSelector((state) => state.userInfo);
   const isAuth = user !== null;
   const nick = userData.displayName;
   const hasNick = nick !== undefined;
@@ -25,7 +26,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />}></Route>
-          <Route path="auth" element={<AuthPage />} />
+          <Route
+            path="auth"
+            element={
+              <ProtectedRoutes allowed={!isAuth} path="/">
+                <AuthPage />
+              </ProtectedRoutes>
+            }
+          />
           <Route
             path="profile"
             element={
