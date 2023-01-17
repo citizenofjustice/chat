@@ -12,6 +12,7 @@ import {
 import storage from "redux-persist/lib/storage";
 
 import authSlice from "./auth-slice";
+import chatSlice from "./chat-slice";
 import userInfoSlice from "./userInfo-slice";
 // import uiSlice from "./ui-slice";
 
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   auth: authSlice.reducer,
   userInfo: userInfoSlice.reducer,
   // ui: uiSlice.reducer,
+  chat: chatSlice.reducer,
 });
 
 const persistConfig = {

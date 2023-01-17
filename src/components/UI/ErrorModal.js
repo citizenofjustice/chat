@@ -4,6 +4,7 @@ import errorSVG from "../../assets/errorIcon.svg";
 import styles from "./ErrorModal.module.scss";
 import { authActions } from "../../store/auth-slice";
 import { userInfoActions } from "../../store/userInfo-slice";
+import { chatActions } from "../../store/chat-slice";
 
 const ErrorModal = (props) => {
   const dispatch = useDispatch();
@@ -11,6 +12,7 @@ const ErrorModal = (props) => {
   const closeErrorHandler = () => {
     dispatch(authActions.closeError());
     dispatch(userInfoActions.closeError());
+    dispatch(chatActions.closeError());
   };
 
   return (

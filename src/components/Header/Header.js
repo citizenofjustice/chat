@@ -46,6 +46,7 @@ const Header = () => {
       </div>
       <ul className={styles["nav-links"]}>
         {!isAuth && <CustomLink path="/auth">Вход</CustomLink>}
+        {isAuth && <CustomLink path="/chat">Чат</CustomLink>}
         {isAuth && <CustomLink path="/profile">Профиль</CustomLink>}
         {isAuth && (
           <CustomLink path="/" onClick={logoutHandler}>

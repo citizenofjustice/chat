@@ -1,0 +1,20 @@
+@import "../../styles/variables.module.scss";
+
+.inputs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .message-field {
+    width: 100%;
+    resize: none;
+    border-radius: 5px;
+    font-family: $mainFont;
+    min-height: 10vh;
+    font-size: $mainFontSize;
+    padding: 5px 8px;
+    outline: none;
+  }
+  .button {
+    margin-left: 0.5rem;
+  }
+}

@@ -8,6 +8,7 @@ import HomePage from "./components/pages/HomePage";
 import InitialSettingsPage from "./components/pages/InitialSettingsPage";
 import EditProfile from "./components/Profile/EditProfile";
 import ProtectedRoutes from "./ProtectedRoutes";
+import ChatPage from "./components/pages/ChatPage";
 
 import "./styles/reset.module.scss";
 import "./styles/variables.module.scss";
@@ -45,6 +46,15 @@ function App() {
           >
             <Route path="edit-profile" element={<EditProfile />} />
           </Route>
+          <Route
+            path="chat"
+            element={
+              <ProtectedRoutes allowed={isAuth} path="/auth">
+                {hasNick && <ChatPage />}
+                {!hasNick && <InitialSettingsPage />}
+              </ProtectedRoutes>
+            }
+          />
           <Route path="*" element={<p>There's nothing here: 404!</p>} />
         </Route>
       </Routes>
