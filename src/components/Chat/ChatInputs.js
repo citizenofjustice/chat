@@ -1,11 +1,11 @@
 import { sendMessage } from "../../store/chat-slice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styles from "./ChatInputs.module.scss";
 import { useRef } from "react";
 
 const ChatInputs = (props) => {
   const dispatch = useDispatch();
-  const { status, error } = useSelector((state) => state.chat);
+  // const { status, error } = useSelector((state) => state.chat);
   const messageInput = useRef();
 
   const submitMessageHandler = (event) => {
@@ -20,6 +20,7 @@ const ChatInputs = (props) => {
         })
       );
       //   setMessages([...messages, newMessage]);
+      props.onAdditon(true);
       messageInput.current.value = "";
     }
   };

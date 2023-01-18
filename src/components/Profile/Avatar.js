@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ref } from "firebase/storage";
-import storage from "../../firebase";
+import { storage } from "../../firebase";
 
 import { getUserInfo, updateProfile } from "../../store/userInfo-slice";
 import useFirebase from "../../hooks/use-firebase";
