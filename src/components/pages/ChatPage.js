@@ -9,12 +9,17 @@ import ChatMessages from "../Chat/ChatMessages";
 const ChatPage = () => {
   const { messages, status, error } = useSelector((state) => state.chat);
   const { userData } = useSelector((state) => state.userInfo);
-  const { localId } = userData;
+  const { localId, displayName } = userData;
 
   return (
     <ErrorModal isActive={status === "rejected"} errorMessage={error}>
       <div className={styles.chat}>
-        <ChatMessages status={status} messages={messages} userId={localId} />
+        <ChatMessages
+          status={status}
+          messages={messages}
+          userId={localId}
+          nickname={displayName}
+        />
         <ChatInputs userId={localId} />
       </div>
     </ErrorModal>

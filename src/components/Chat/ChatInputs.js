@@ -21,7 +21,6 @@ const ChatInputs = (props) => {
       console.log(message);
       dispatch(
         sendMessage({
-          userId: props.userId,
           message: message.trim(),
           time: new Date().toISOString(),
         })

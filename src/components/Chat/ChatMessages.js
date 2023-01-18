@@ -2,6 +2,8 @@ import styles from "./ChatMessages.module.scss";
 import { useEffect, useRef, useState } from "react";
 import { ref, onValue } from "firebase/database";
 import { db } from "../../firebase";
+import RoundImage from "../UI/RoundImage";
+import placeholderAvatar from "../../assets/placeholderAvatar.png";
 
 const ChatMessages = (props) => {
   const [messages, setMessages] = useState([]);
@@ -17,10 +19,10 @@ const ChatMessages = (props) => {
     });
     messageList.querySelectorAll("textarea").forEach((el) => {
       el.style.width = "1px";
-      el.style.width = el.scrollWidth + "px";
+      el.style.width = 5 + el.scrollWidth + "px";
     });
     messageList.querySelectorAll("textarea").forEach((el) => {
-      el.style.whiteSpace = "pre-line";
+      el.style.whiteSpace = "pre-wrap";
     });
   };
 
@@ -47,6 +49,7 @@ const ChatMessages = (props) => {
           return new Date(a.time) - new Date(b.time);
         });
         setMessages(messages);
+        console.log(messages);
       },
       (error) => {
         console.log("cancel call ", error);
@@ -55,7 +58,8 @@ const ChatMessages = (props) => {
   }, []);
 
   useEffect(() => {
-    if (messages) {
+    if (messages.length > 0) {
+      styleMessages();
       styleMessages();
       bottom.current.scrollIntoView({ behavior: "smooth" });
     }
@@ -71,6 +75,8 @@ const ChatMessages = (props) => {
               isOwner={item.ownerId === props.userId}
               message={item.message}
               date={item.time}
+              avatar={item.profilePic}
+              nick={item.nickname}
             />
           ))}
         <div key="bottom" className={styles.bottom} ref={bottom} />
@@ -81,16 +87,34 @@ const ChatMessages = (props) => {
 
 const ListItem = (props) => {
   return (
-    <li className={`${styles["wrapper"]} ${props.isOwner ? styles.right : ""}`}>
-      <span className={styles.message}>
-        <textarea
-          readOnly
-          defaultValue={props.message}
-          className={styles["message-content"]}
-        />
-        {/* </label> */}
-        <FormatDate type="time" dateObj={props.date} />
-      </span>
+    <li className={styles["list-item"]}>
+      <div
+        className={`${styles["wrapper"]} ${props.isOwner ? styles.right : ""}`}
+      >
+        {!props.isOwner && (
+          <RoundImage
+            size="chat-pic"
+            profilePic={props.avatar ? props.avatar : placeholderAvatar}
+            alt="user-pic"
+          />
+        )}
+        <span className={styles.message}>
+          <p>{props.nick}</p>
+          <textarea
+            readOnly
+            defaultValue={props.message}
+            className={styles["message-content"]}
+          />
+          <FormatDate type="time" dateObj={props.date} />
+        </span>
+        {/* {props.isOwner && (
+          <RoundImage
+            size="chat-pic"
+            profilePic={props.avatar}
+            alt="user-pic"
+          />
+        )} */}
+      </div>
     </li>
   );
 };
