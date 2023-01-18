@@ -61,7 +61,7 @@ const Header = () => {
 // custom navLink with path passed through props
 const CustomLink = (props) => {
   return (
-    <li className={styles.link}>
+    <li key={props.path} className={styles.link}>
       <Button type="green">
         <NavLink
           onClick={props.onClick}

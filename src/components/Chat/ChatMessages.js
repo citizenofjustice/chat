@@ -1,16 +1,28 @@
 import styles from "./ChatMessages.module.scss";
-import { useDispatch, useSelector } from "react-redux";
-// import { getAllMessages } from "../../store/chat-slice";
 import { useEffect, useRef, useState } from "react";
-// import LoadingSpinner from "../UI/LoadingSpinner";
 import { ref, onValue } from "firebase/database";
 import { db } from "../../firebase";
 
 const ChatMessages = (props) => {
   const [messages, setMessages] = useState([]);
-  const dispatch = useDispatch();
-  const { userData } = useSelector((state) => state.userInfo);
   const bottom = useRef();
+
+  const styleMessages = () => {
+    const messageList = document.getElementById("messageList");
+    messageList.querySelectorAll("textarea").forEach((el) => {
+      el.style.height = el.setAttribute(
+        "style",
+        "height: " + el.scrollHeight + "px"
+      );
+    });
+    messageList.querySelectorAll("textarea").forEach((el) => {
+      el.style.width = "1px";
+      el.style.width = el.scrollWidth + "px";
+    });
+    messageList.querySelectorAll("textarea").forEach((el) => {
+      el.style.whiteSpace = "pre-line";
+    });
+  };
 
   useEffect(() => {
     const messagesRef = ref(db, `messages/`);
@@ -22,7 +34,11 @@ const ChatMessages = (props) => {
         for (const key in data) {
           const user = data[key];
           for (const msg in user) {
-            messages.push(user[msg]);
+            const msgWithId = {
+              ...user[msg],
+              index: msg,
+            };
+            messages.push(msgWithId);
           }
         }
         messages.sort(function (a, b) {
@@ -30,54 +46,62 @@ const ChatMessages = (props) => {
           // to get a value that is either negative, positive, or zero.
           return new Date(a.time) - new Date(b.time);
         });
-        console.log(messages);
         setMessages(messages);
       },
       (error) => {
         console.log("cancel call ", error);
       }
     );
-    if (props.scroll) {
-      bottom.current?.scrollIntoView({ behavior: "smooth" });
-    } else {
-      bottom.current?.scrollIntoView({ behavior: "auto" });
+  }, []);
+
+  useEffect(() => {
+    if (messages) {
+      styleMessages();
+      bottom.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [dispatch, userData.localId, props.scroll]);
+  }, [messages]);
 
   return (
-    <div className={styles.messages}>
-      {/* {props.status === "pending" ? (
-        <LoadingSpinner />
-      ) : ( */}
+    <div id="messageList" className={styles.messages}>
       <ul className={styles["message-list"]}>
-        {messages.map((item) => (
-          <div
-            key={Math.random()}
-            className={`${styles["wrapper"]} ${
-              item.ownerId === props.userId ? styles.right : ""
-            }`}
-          >
-            <li className={styles.message} key={item.index}>
-              {item.message}
-              <br />
-              <FormatDate type="time" date={item.time} />
-            </li>
-          </div>
-        ))}
-        <div ref={bottom} />
+        {messages.length > 0 &&
+          messages.map((item) => (
+            <ListItem
+              key={item.index}
+              isOwner={item.ownerId === props.userId}
+              message={item.message}
+              date={item.time}
+            />
+          ))}
+        <div key="bottom" className={styles.bottom} ref={bottom} />
       </ul>
-      {/* )} */}
     </div>
+  );
+};
+
+const ListItem = (props) => {
+  return (
+    <li className={`${styles["wrapper"]} ${props.isOwner ? styles.right : ""}`}>
+      <span className={styles.message}>
+        <textarea
+          readOnly
+          defaultValue={props.message}
+          className={styles["message-content"]}
+        />
+        {/* </label> */}
+        <FormatDate type="time" dateObj={props.date} />
+      </span>
+    </li>
   );
 };
 
 const FormatDate = (props) => {
   let output;
-  const dateObj = new Date(props.date);
+  const dateObj = new Date(props.dateObj);
   const date = dateObj.toLocaleDateString();
   const time = dateObj.toLocaleTimeString();
   if (props.type === "time") {
-    output = time;
+    output = time.slice(0, 5);
   } else if (props.type === "date") {
     output = date;
   }

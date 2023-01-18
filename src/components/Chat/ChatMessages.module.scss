@@ -1,53 +1,70 @@
 @import "../../styles/variables.module.scss";
 
 .messages {
-  padding: 1rem;
-  margin-bottom: 1rem;
-  overflow-y: auto;
-  margin: 1rem 0;
-  border-radius: 5px;
-  border: 8px solid lighten($controlsBackColor, 8%);
-  background-color: lighten($controlsBackColor, 8%);
-  padding: 0.5rem 0 0.1rem 0;
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-  &::-webkit-scrollbar-track {
-    background-color: #e4e4e4;
-    border-radius: 100px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: darken($controlsBackColor, 15%);
-    border-radius: 100px;
-  }
   .message-list {
     min-height: 30vh;
     max-height: 55vh;
+    overflow-y: auto;
+    margin: 1rem 0;
+    border-radius: 5px;
+    border: 8px solid lighten($controlsBackColor, 8%);
+    background-color: lighten($controlsBackColor, 8%);
+    padding: 0.5rem 0 0.1rem 0;
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: #e4e4e4;
+      border-radius: 100px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: darken($controlsBackColor, 15%);
+      border-radius: 100px;
+    }
     .wrapper {
       display: flex;
       justify-content: flex-start;
-      margin: 0.5rem 4rem 0.5rem 0.5rem; // left side
+      margin: 0.5rem 5rem 0.5rem 0.5rem; // left side
       .message {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        width: fit-content;
+        max-width: 85%;
         line-height: 1.125rem; //might be dynamic, maybe font too
         background-color: lighten($backgroundColor, 10%);
-        color: white;
         padding: 0.5rem 0.75rem 0 0.75rem;
         border-radius: 4px;
         text-align: start; // left side
+        .message-content {
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+          outline: none;
+          resize: none;
+          overflow: hidden;
+          max-width: 100%;
+          white-space: pre;
+          margin: 0;
+          padding: 0;
+          border-width: 0;
+          background-color: inherit; // left side
+          font-size: $mainFontSize;
+          color: white;
+          font-weight: 500;
+        }
       }
       &.right {
         display: flex;
         justify-content: flex-end;
         text-align: end; // left side
-        margin: 0.5rem 0.5rem 0.5rem 4rem;
+        margin: 0.5rem 0.5rem 0.5rem 5rem;
         .message {
           background-color: darken($backgroundColor, 10%);
+          .message-content {
+            background-color: inherit;
+          }
         }
       }
+    }
+    .bottom {
+      text-align: center;
     }
   }
 }

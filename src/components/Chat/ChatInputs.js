@@ -8,25 +8,35 @@ const ChatInputs = (props) => {
   // const { status, error } = useSelector((state) => state.chat);
   const messageInput = useRef();
 
+  const enterHandler = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      submitMessageHandler(event);
+    }
+  };
+
   const submitMessageHandler = (event) => {
     event.preventDefault();
     const message = messageInput.current.value;
-    if (message !== "") {
+    if (message.trim().length > 0) {
+      console.log(message);
       dispatch(
         sendMessage({
           userId: props.userId,
-          message,
+          message: message.trim(),
           time: new Date().toISOString(),
         })
       );
-      //   setMessages([...messages, newMessage]);
-      props.onAdditon(true);
       messageInput.current.value = "";
     }
   };
+
   return (
     <form className={styles.inputs} onSubmit={submitMessageHandler}>
-      <textarea ref={messageInput} className={styles["message-field"]} />
+      <textarea
+        ref={messageInput}
+        className={styles["message-field"]}
+        onKeyUp={enterHandler}
+      />
       <span className={styles.button}>
         <button>Отправить</button>
       </span>
