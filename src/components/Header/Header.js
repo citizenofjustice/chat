@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 import { authActions, calcRemainingTime } from "../../store/auth-slice";
 import { userInfoActions } from "../../store/userInfo-slice";
@@ -29,7 +29,6 @@ const Header = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(expirationTime);
     if (!!expirationTime) {
       const duration = calcRemainingTime(expirationTime);
       clearTimeout(logoutTimer);
@@ -42,12 +41,20 @@ const Header = () => {
   return (
     <nav className={styles.header}>
       <div className={styles.logo}>
-        <NavLink to="/">logo</NavLink>
+        <Link to="/">logo</Link>
       </div>
       <ul className={styles["nav-links"]}>
         {!isAuth && <CustomLink path="/auth">Вход</CustomLink>}
-        {isAuth && <CustomLink path="/chat">Чат</CustomLink>}
-        {isAuth && <CustomLink path="/profile">Профиль</CustomLink>}
+        {isAuth && (
+          <CustomLink isNav={true} path="/chat">
+            Чат
+          </CustomLink>
+        )}
+        {isAuth && (
+          <CustomLink isNav={true} path="/profile">
+            Профиль
+          </CustomLink>
+        )}
         {isAuth && (
           <CustomLink path="/" onClick={logoutHandler}>
             Выход
@@ -63,13 +70,19 @@ const CustomLink = (props) => {
   return (
     <li key={props.path} className={styles.link}>
       <Button type="green">
-        <NavLink
-          onClick={props.onClick}
-          className={(navData) => (navData.isActive ? styles.active : "")}
-          to={props.path}
-        >
-          {props.children}
-        </NavLink>
+        {props.isNav === true ? (
+          <NavLink
+            onClick={props.onClick}
+            to={props.path}
+            className={(navData) => (navData.isActive ? styles.active : "")}
+          >
+            {props.children}
+          </NavLink>
+        ) : (
+          <Link onClick={props.onClick} to={props.path}>
+            {props.children}
+          </Link>
+        )}
       </Button>
     </li>
   );

@@ -43,7 +43,6 @@ export const changeUsername = createAsyncThunk(
 
       return data;
     } catch (error) {
-      console.log(error, error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -114,7 +113,8 @@ export const getUserInfo = createAsyncThunk(
         throw new Error(response.statusText);
       }
       const data = await response.json();
-      return data.users[0];
+      const userInfo = data.users[0];
+      return userInfo;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -159,14 +159,58 @@ export const updateProfile = createAsyncThunk(
         }
         throw new Error(errorMessage);
       }
+      const { displayName, photoUrl } = data;
+      return { displayName, photoUrl };
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
+export const setUserInfoToDb = async (userId, value, infoType) => {
+  try {
+    const response = await fetch(
+      `https://chat-app-1e2f6-default-rtdb.europe-west1.firebasedatabase.app/users/${userId}/${infoType}.json`,
+      {
+        method: "PUT",
+        body: JSON.stringify(value),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error(
+        "User info setting to database failed. ",
+        response.statusText
+      );
+    }
+    await response.json();
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const getUserInfoFromDb = async (userId) => {
+  try {
+    const response = await fetch(
+      `https://chat-app-1e2f6-default-rtdb.europe-west1.firebasedatabase.app/users/${userId}.json`
+    );
+    if (!response.ok) {
+      throw new Error(
+        "User info setting to database failed. ",
+        response.statusText
+      );
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 const initialState = {
-  userData: [],
+  userData: {},
   status: null,
   error: null,
 };
@@ -190,8 +234,18 @@ const userInfoSlice = createSlice({
       state.status = "pending";
       state.error = null;
     },
-    [updateProfile.fulfilled]: (state) => {
+    [updateProfile.fulfilled]: (state, action) => {
       state.status = "resolved";
+      const newObj = state.userData;
+      for (const key in newObj) {
+        if (key === "displayName") {
+          newObj[key] = action.payload.displayName;
+        }
+        if (key === "photoUrl") {
+          newObj[key] = action.payload.photoUrl;
+        }
+      }
+      state.userData = newObj;
     },
     [updateProfile.rejected]: (state, action) => {
       state.status = "rejected";

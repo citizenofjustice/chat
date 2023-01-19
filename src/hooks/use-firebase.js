@@ -3,7 +3,9 @@ import {
   listAll,
   getDownloadURL,
   deleteObject,
+  ref,
 } from "firebase/storage";
+import { storage } from "../firebase";
 
 const useFirebase = () => {
   const uploadProfilePic = async (filePath, profilePic, oldImagesFolder) => {
@@ -30,9 +32,20 @@ const useFirebase = () => {
     }
   };
 
+  const getUserPictureUrl = async (userId) => {
+    const folderRef = ref(storage, `${userId}/profile-picture`);
+    const fileList = await listAll(folderRef);
+    const latestProfilePic = fileList.items.pop();
+    if (latestProfilePic) {
+      const url = await getDownloadURL(latestProfilePic);
+      return url;
+    } else return null;
+  };
+
   return {
     uploadProfilePic,
     deleteOldProfilePics,
+    getUserPictureUrl,
   };
 };
 export default useFirebase;

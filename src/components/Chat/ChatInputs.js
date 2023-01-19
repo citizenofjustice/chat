@@ -2,6 +2,7 @@ import { sendMessage } from "../../store/chat-slice";
 import { useDispatch } from "react-redux";
 import styles from "./ChatInputs.module.scss";
 import { useRef } from "react";
+import sendArrowImg from "../../assets/arrow.svg";
 
 const ChatInputs = (props) => {
   const dispatch = useDispatch();
@@ -18,7 +19,6 @@ const ChatInputs = (props) => {
     event.preventDefault();
     const message = messageInput.current.value;
     if (message.trim().length > 0) {
-      console.log(message);
       dispatch(
         sendMessage({
           message: message.trim(),
@@ -36,9 +36,9 @@ const ChatInputs = (props) => {
         className={styles["message-field"]}
         onKeyUp={enterHandler}
       />
-      <span className={styles.button}>
-        <button>Отправить</button>
-      </span>
+      <button className={styles.button}>
+        <img className={styles.icon} src={sendArrowImg} alt="send-icon" />
+      </button>
     </form>
   );
 };

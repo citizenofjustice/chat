@@ -60,7 +60,6 @@ export const authUser = createAsyncThunk(
         })
       );
       dispatch(getUserInfo(idToken));
-
       return data;
     } catch (error) {
       return rejectWithValue(error.message);

@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { ref } from "firebase/storage";
 import { storage } from "../../firebase";
 
-import { getUserInfo, updateProfile } from "../../store/userInfo-slice";
+import {
+  getUserInfo,
+  updateProfile,
+  setUserInfoToDb,
+} from "../../store/userInfo-slice";
 import useFirebase from "../../hooks/use-firebase";
 
 import defaultAvatar from "../../assets/placeholderAvatar.png";
@@ -44,10 +48,10 @@ const Avatar = (props) => {
       profilePicFolderRef
     );
     setImageUpload(null);
+    await setUserInfoToDb(localId, imageUrl, "profilePicture");
     dispatch(
       updateProfile({ type: "profilePicture", token, newValue: imageUrl })
     );
-    setProfilePic(imageUrl);
   };
 
   const canelUploadHandler = () => {

@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { updateProfile } from "../../store/userInfo-slice";
+import { setUserInfoToDb, updateProfile } from "../../store/userInfo-slice";
 
 import Avatar from "../Profile/Avatar";
 import ErrorModal from "../UI/ErrorModal";
@@ -11,6 +11,7 @@ import styles from "./InitialSettingsPage.module.scss";
 
 const InitialSettingsPage = () => {
   const { token, status, error } = useSelector((state) => state.auth);
+  const { userData } = useSelector((state) => state.userInfo);
   const dispatch = useDispatch();
   const nicknameInput = useRef();
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const InitialSettingsPage = () => {
     dispatch(
       updateProfile({ type: "nickname", token, newValue: enteredNickname })
     );
+    setUserInfoToDb(userData.localId, enteredNickname, "nickname");
     navigate("/");
     nicknameInput.current.value = "";
   };

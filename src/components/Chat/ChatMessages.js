@@ -4,6 +4,7 @@ import { ref, onValue } from "firebase/database";
 import { db } from "../../firebase";
 import RoundImage from "../UI/RoundImage";
 import placeholderAvatar from "../../assets/placeholderAvatar.png";
+import { getUserInfoFromDb } from "../../store/userInfo-slice";
 
 const ChatMessages = (props) => {
   const [messages, setMessages] = useState([]);
@@ -30,14 +31,18 @@ const ChatMessages = (props) => {
     const messagesRef = ref(db, `messages/`);
     onValue(
       messagesRef,
-      (snapshot) => {
-        const data = snapshot.val();
+      async (snapshot) => {
+        const data = await snapshot.val();
         const messages = [];
         for (const key in data) {
           const user = data[key];
+          const userInfo = await getUserInfoFromDb(key);
+          const { profilePicture, nickname } = userInfo;
           for (const msg in user) {
             const msgWithId = {
               ...user[msg],
+              profilePic: profilePicture,
+              nickname: nickname,
               index: msg,
             };
             messages.push(msgWithId);
@@ -49,10 +54,9 @@ const ChatMessages = (props) => {
           return new Date(a.time) - new Date(b.time);
         });
         setMessages(messages);
-        console.log(messages);
       },
       (error) => {
-        console.log("cancel call ", error);
+        throw new Error(error.message);
       }
     );
   }, []);
@@ -99,7 +103,7 @@ const ListItem = (props) => {
           />
         )}
         <span className={styles.message}>
-          <p>{props.nick}</p>
+          {!props.isOwner && <p className={styles.nickname}>{props.nick}</p>}
           <textarea
             readOnly
             defaultValue={props.message}

@@ -6,6 +6,7 @@ import {
   changeUsername,
   changePassword,
   updateProfile,
+  setUserInfoToDb,
 } from "../../store/userInfo-slice";
 
 import ErrorModal from "../UI/ErrorModal";
@@ -15,7 +16,7 @@ const EditProfile = () => {
   const dispatch = useDispatch();
 
   const { user, token, status, error } = useSelector((state) => state.auth);
-
+  const { userData } = useSelector((state) => state.userInfo);
   const changeNicknameInput = useRef();
   const changeUsernameInput = useRef();
   const changePasswordInput = useRef();
@@ -25,8 +26,11 @@ const EditProfile = () => {
   };
 
   const changeNicknameHandler = () => {
-    const enteredNick = changeNicknameInput.current.value;
-    dispatch(updateProfile({ type: "nickname", token, newValue: enteredNick }));
+    const enteredNickname = changeNicknameInput.current.value;
+    dispatch(
+      updateProfile({ type: "nickname", token, newValue: enteredNickname })
+    );
+    setUserInfoToDb(userData.localId, enteredNickname, "nickname");
     changeNicknameInput.current.value = "";
   };
 
