@@ -3,10 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 const uiSlice = createSlice({
   name: "ui",
   initialState: {
-    errorMessage: null,
+    isMenuShown: false,
   },
-  reducers: {},
+  reducers: {
+    toggleMenu(state) {
+      state.isMenuShown = !state.isMenuShown;
+    },
+  },
 });
 
-export const uiActions = createSlice.actions;
+export const uiActions = uiSlice.actions;
 export default uiSlice;

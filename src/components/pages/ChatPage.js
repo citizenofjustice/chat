@@ -13,7 +13,7 @@ const ChatPage = () => {
 
   return (
     <ErrorModal isActive={status === "rejected"} errorMessage={error}>
-      <div className={styles.chat}>
+      <section className={styles.chat}>
         <ChatMessages
           status={status}
           messages={messages}
@@ -21,7 +21,7 @@ const ChatPage = () => {
           nickname={displayName}
         />
         <ChatInputs userId={localId} />
-      </div>
+      </section>
     </ErrorModal>
   );
 };

@@ -7,13 +7,14 @@ a:link {
   color: $inputTextColor;
 }
 .header {
-  height: 80px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;
-  background-color: $backgroundColor;
+  height: 10vh;
+  background-color: darken($backgroundColor, 15%);
+  // border-bottom: 2px solid whitesmoke;
   .logo {
     text-transform: uppercase;
     background-color: rgb(251, 251, 251);
@@ -30,6 +31,9 @@ a:link {
     }
     .link {
       margin-left: 1rem;
+    }
+    @media (max-width: 576px) {
+      display: none;
     }
   }
 }
