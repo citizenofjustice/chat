@@ -4,9 +4,11 @@ import styles from "./ChatInputs.module.scss";
 import { useRef } from "react";
 import sendArrowImg from "../../assets/arrow.svg";
 
-const ChatInputs = (props) => {
+const ChatInputs = () => {
   const dispatch = useDispatch();
-  // const { status, error } = useSelector((state) => state.chat);
+  // const { localId, displayName, photoUrl } = useSelector(
+  //   (state) => state.userInfo.userData
+  // );
   const messageInput = useRef();
 
   const enterHandler = (event) => {
@@ -17,11 +19,11 @@ const ChatInputs = (props) => {
 
   const submitMessageHandler = (event) => {
     event.preventDefault();
-    const message = messageInput.current.value;
-    if (message.trim().length > 0) {
+    const message = messageInput.current.value.trim();
+    if (message.length > 0) {
       dispatch(
         sendMessage({
-          message: message.trim(),
+          message: message,
           time: new Date().toISOString(),
         })
       );

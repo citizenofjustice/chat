@@ -25,6 +25,9 @@ const SideMenu = (props) => {
       className={`${styles["side-nav"]} ${props.isActive && styles["active"]}`}
     >
       <div className={styles["menu-wrapper"]}>
+        <div className={styles.burger}>
+          <MenuButton />
+        </div>
         <ul className={styles["side-menu"]}>
           <ListItem classText="menu-item" path="/">
             Главная страница
@@ -50,7 +53,6 @@ const SideMenu = (props) => {
             </ListItem>
           )}
         </ul>
-        <MenuButton />
       </div>
     </nav>
   );

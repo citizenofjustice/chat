@@ -203,7 +203,11 @@ export const getUserInfoFromDb = async (userId) => {
       );
     }
     const data = await response.json();
-    return data;
+    const result = {
+      ...data,
+      userId: userId,
+    };
+    return result;
   } catch (error) {
     throw new Error(error.message);
   }

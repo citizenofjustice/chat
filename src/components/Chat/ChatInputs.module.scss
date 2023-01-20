@@ -29,7 +29,11 @@
       border-radius: 100px;
     }
   }
-
+  @media (max-width: 425px) {
+    .message-field {
+      height: 5vh;
+    }
+  }
   .button {
     display: flex;
     align-items: flex-start;

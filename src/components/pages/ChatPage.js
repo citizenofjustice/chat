@@ -7,7 +7,7 @@ import ChatInputs from "../Chat/ChatInputs";
 import ChatMessages from "../Chat/ChatMessages";
 
 const ChatPage = () => {
-  const { messages, status, error } = useSelector((state) => state.chat);
+  const { currentMessage, status, error } = useSelector((state) => state.chat);
   const { userData } = useSelector((state) => state.userInfo);
   const { localId, displayName } = userData;
 
@@ -16,9 +16,9 @@ const ChatPage = () => {
       <section className={styles.chat}>
         <ChatMessages
           status={status}
-          messages={messages}
           userId={localId}
           nickname={displayName}
+          currentMessage={currentMessage}
         />
         <ChatInputs userId={localId} />
       </section>

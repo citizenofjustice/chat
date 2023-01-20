@@ -8,6 +8,7 @@ import { userInfoActions } from "../../store/userInfo-slice";
 import Button from "../UI/Button";
 import MenuButton from "../UI/MenuButton";
 import SideMenu from "../UI/SideMenu";
+import logoImg from "../../assets/logo.png";
 import styles from "./Header.module.scss";
 
 // variable that storing timeout and clearing it when time runs out
@@ -45,7 +46,9 @@ const Header = () => {
     <>
       <nav className={styles.header}>
         <div className={styles.logo}>
-          <Link to="/">logo</Link>
+          <Link to="/">
+            <img src={logoImg} alt="logo" />
+          </Link>
         </div>
         <ul className={styles["nav-links"]}>
           {!isAuth && <CustomLink path="/auth">Вход</CustomLink>}

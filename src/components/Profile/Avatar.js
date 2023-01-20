@@ -48,6 +48,7 @@ const Avatar = (props) => {
       profilePicFolderRef
     );
     setImageUpload(null);
+    setProfilePic(imageUrl);
     await setUserInfoToDb(localId, imageUrl, "profilePicture");
     dispatch(
       updateProfile({ type: "profilePicture", token, newValue: imageUrl })

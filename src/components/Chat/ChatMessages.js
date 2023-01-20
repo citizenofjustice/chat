@@ -9,23 +9,8 @@ import { getUserInfoFromDb } from "../../store/userInfo-slice";
 const ChatMessages = (props) => {
   const [messages, setMessages] = useState([]);
   const bottom = useRef();
-
-  const styleMessages = () => {
-    const messageList = document.getElementById("messageList");
-    messageList.querySelectorAll("textarea").forEach((el) => {
-      el.style.height = el.setAttribute(
-        "style",
-        "height: " + el.scrollHeight + "px"
-      );
-    });
-    messageList.querySelectorAll("textarea").forEach((el) => {
-      el.style.width = "1px";
-      el.style.width = 5 + el.scrollWidth + "px";
-    });
-    messageList.querySelectorAll("textarea").forEach((el) => {
-      el.style.whiteSpace = "pre-wrap";
-    });
-  };
+  // const [familiarUsers, setFamiliarUsers] = useState([]);
+  let [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     const messagesRef = ref(db, `messages/`);
@@ -36,13 +21,20 @@ const ChatMessages = (props) => {
         const messages = [];
         for (const key in data) {
           const user = data[key];
-          const userInfo = await getUserInfoFromDb(key);
-          const { profilePicture, nickname } = userInfo;
+          let userInfo;
+          // const familiar = familiarUsers.find((item) => item.userId === key);
+          // if (familiar === undefined) {
+          userInfo = await getUserInfoFromDb(key);
+          // setFamiliarUsers((familiarUsers) => [...familiarUsers, userInfo]);
+          // } else userInfo = familiar;
           for (const msg in user) {
             const msgWithId = {
               ...user[msg],
-              profilePic: profilePicture,
-              nickname: nickname,
+              profilePic:
+                userInfo.profilePicture === null
+                  ? null
+                  : userInfo.profilePicture,
+              nickname: userInfo.nickname,
               index: msg,
             };
             messages.push(msgWithId);
@@ -54,6 +46,7 @@ const ChatMessages = (props) => {
           return new Date(a.time) - new Date(b.time);
         });
         setMessages(messages);
+        setIsMounted(true);
       },
       (error) => {
         throw new Error(error.message);
@@ -62,12 +55,10 @@ const ChatMessages = (props) => {
   }, []);
 
   useEffect(() => {
-    if (messages.length > 0) {
-      styleMessages();
-      styleMessages();
-      bottom.current.scrollIntoView({ behavior: "smooth" });
+    if (isMounted) {
+      bottom.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages]);
+  }, [isMounted]);
 
   return (
     <div id="messageList" className={styles.messages}>
@@ -83,8 +74,18 @@ const ChatMessages = (props) => {
               nick={item.nickname}
             />
           ))}
-        <div key="bottom" className={styles.bottom} ref={bottom} />
+        {/* {props.currentMessage !== null && (
+          <ListItem
+            key={props.currentMessage.key}
+            isOwner={props.currentMessage.ownerId === props.userId}
+            message={props.currentMessage.message}
+            date={props.currentMessage.time}
+            avatar={props.currentMessage.profilePic}
+            nick={props.currentMessage.nickname}
+          />
+        )} */}
       </ul>
+      <div className={styles.bottom} ref={bottom} />
     </div>
   );
 };
@@ -104,20 +105,9 @@ const ListItem = (props) => {
         )}
         <span className={styles.message}>
           {!props.isOwner && <p className={styles.nickname}>{props.nick}</p>}
-          <textarea
-            readOnly
-            defaultValue={props.message}
-            className={styles["message-content"]}
-          />
+          {props.message}
           <FormatDate type="time" dateObj={props.date} />
         </span>
-        {/* {props.isOwner && (
-          <RoundImage
-            size="chat-pic"
-            profilePic={props.avatar}
-            alt="user-pic"
-          />
-        )} */}
       </div>
     </li>
   );

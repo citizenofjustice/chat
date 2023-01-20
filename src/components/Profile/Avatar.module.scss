@@ -8,7 +8,7 @@
     margin: 0 auto;
   }
   .file {
-    margin-left: 1rem;
+    margin: 0 0 0 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -30,11 +30,12 @@
       display: flex;
       justify-content: center;
       border-radius: 10px;
-      padding: 5px 10px;
+      padding: 5px;
       background-color: $controlsBackColor;
       border: 2px solid $controlsBorderColor;
       color: $inputTextColor;
       font-weight: bold;
+      text-align: center;
       &:hover {
         background-color: $backgroundColor;
         color: $controlsBackColor;
@@ -44,6 +45,15 @@
       outline: $inputOutline;
       background-color: $backgroundColor;
       color: $controlsBackColor;
+    }
+  }
+}
+@media (max-width: 320px) {
+  .avatar {
+    display: flex;
+    flex-direction: column;
+    .file {
+      margin: 0.5rem 0 0 0;
     }
   }
 }

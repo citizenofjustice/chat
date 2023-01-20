@@ -17,13 +17,19 @@ const InitialSettingsPage = () => {
   const navigate = useNavigate();
 
   const saveNicknameHandler = () => {
-    const enteredNickname = nicknameInput.current.value;
-    dispatch(
-      updateProfile({ type: "nickname", token, newValue: enteredNickname })
-    );
-    setUserInfoToDb(userData.localId, enteredNickname, "nickname");
-    navigate("/");
-    nicknameInput.current.value = "";
+    const enteredNickname = nicknameInput.current.value.trim();
+    if (enteredNickname.length > 0) {
+      dispatch(
+        updateProfile({
+          type: "nickname",
+          token,
+          newValue: enteredNickname,
+        })
+      );
+      setUserInfoToDb(userData.localId, enteredNickname, "nickname");
+      navigate("/");
+      nicknameInput.current.value = "";
+    }
   };
 
   return (

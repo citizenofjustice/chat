@@ -2,7 +2,6 @@ import { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
-  getUserInfo,
   changeUsername,
   changePassword,
   updateProfile,
@@ -21,21 +20,19 @@ const EditProfile = () => {
   const changeUsernameInput = useRef();
   const changePasswordInput = useRef();
 
-  const getDataHandler = () => {
-    dispatch(getUserInfo(token));
-  };
-
   const changeNicknameHandler = () => {
-    const enteredNickname = changeNicknameInput.current.value;
-    dispatch(
-      updateProfile({ type: "nickname", token, newValue: enteredNickname })
-    );
-    setUserInfoToDb(userData.localId, enteredNickname, "nickname");
-    changeNicknameInput.current.value = "";
+    const enteredNickname = changeNicknameInput.current.value.trim();
+    if (enteredNickname.length > 0) {
+      dispatch(
+        updateProfile({ type: "nickname", token, newValue: enteredNickname })
+      );
+      setUserInfoToDb(userData.localId, enteredNickname, "nickname");
+      changeNicknameInput.current.value = "";
+    }
   };
 
   const changeUsernameHandler = async () => {
-    const enteredUsername = changeUsernameInput.current.value;
+    const enteredUsername = changeUsernameInput.current.value.trim();
     if (user !== enteredUsername) {
       dispatch(changeUsername({ token, enteredUsername }));
       changeUsernameInput.current.value = "";
@@ -83,10 +80,6 @@ const EditProfile = () => {
               Поменять
             </span>
           </div>
-          <span className={styles.button} onClick={getDataHandler}>
-            Получить данные
-          </span>
-          {status === "pending" && <h2>Loading...</h2>}
         </form>
       </section>
     </ErrorModal>
