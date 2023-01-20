@@ -100,9 +100,9 @@ const Avatar = (props) => {
                 setImageUpload(event.target.files[0]);
               }}
             />
-            <span className={styles.button} onClick={uploadImageHandler}>
+            <button className={styles.button} onClick={uploadImageHandler}>
               Загрузить
-            </span>
+            </button>
           </div>
         </div>
       )}

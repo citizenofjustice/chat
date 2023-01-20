@@ -1,16 +1,48 @@
+@import "../../styles/variables.module.scss";
+
 .initial {
   padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  .title {
+    font-size: $mainFontSize * 1.5;
+    color: $inputTextColor;
+    font-weight: bold;
+    margin-bottom: 2rem;
+  }
   .initial-info {
-    width: 100%;
-    margin-top: 1rem;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
     .nickname {
+      margin-bottom: 1rem;
+      label {
+        margin: 0 1rem 0 0;
+      }
+      input {
+        padding: 5px;
+        outline: none;
+        border-radius: 5px;
+      }
+    }
+    input,
+    button {
+      font-size: $mainFontSize;
+      font-family: $mainFont;
+    }
+    button {
       display: flex;
-      flex-direction: row;
-      justify-content: space-around;
-      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      padding: 5px 10px;
+      background-color: $controlsBackColor;
+      border: 2px solid $controlsBorderColor;
+      color: $inputTextColor;
+      font-weight: bold;
+      text-align: center;
     }
   }
 }

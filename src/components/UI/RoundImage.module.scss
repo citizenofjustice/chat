@@ -5,11 +5,13 @@
   width: 100px;
   height: 100px;
   border-radius: 50%;
+  outline: 2px solid $controlsBorderColor;
 }
 .profile-pic {
   flex: 1 1 auto;
-  max-width: 150px;
-  max-height: 150px;
+  width: 150px;
+  height: 150px;
+  padding: 5px;
   border-radius: 50%;
   outline: 2px solid $controlsBorderColor;
 }

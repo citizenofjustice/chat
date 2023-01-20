@@ -16,7 +16,8 @@ const InitialSettingsPage = () => {
   const nicknameInput = useRef();
   const navigate = useNavigate();
 
-  const saveNicknameHandler = () => {
+  const saveNicknameHandler = (event) => {
+    event.preventDefault();
     const enteredNickname = nicknameInput.current.value.trim();
     if (enteredNickname.length > 0) {
       dispatch(
@@ -38,14 +39,22 @@ const InitialSettingsPage = () => {
         <LoadingSpinner />
       ) : (
         <section className={styles.initial}>
+          <p className={styles.title}>Инициализация профиля:</p>
           <Avatar page="initial-pic" />
-          <div className={styles["initial-info"]}>
+          <form className={styles["initial-info"]}>
             <span className={styles.nickname}>
-              <label>Имя пользователя:</label>
-              <input ref={nicknameInput} type="text" id="set-nickname" />
+              <label>Введите имя пользователя:</label>
+              <input
+                autoFocus
+                ref={nicknameInput}
+                type="text"
+                id="set-nickname"
+              />
             </span>
-          </div>
-          <span onClick={saveNicknameHandler}>Сохранить</span>
+            <button className={styles.button} onClick={saveNicknameHandler}>
+              Готово
+            </button>
+          </form>
         </section>
       )}
     </ErrorModal>

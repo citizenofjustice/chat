@@ -45,6 +45,7 @@ const AuthForm = () => {
               <div className={styles.field}>
                 <label htmlFor="email">Электронная почта</label>
                 <input
+                  autoFocus
                   ref={emailInput}
                   type="email"
                   id="email"

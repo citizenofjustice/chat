@@ -1,10 +1,16 @@
 @import "../../styles/variables.module.scss";
 
 .chat {
-  border-top: 2px solid white;
+  // margin-top: 1rem;
+  margin: 0 auto;
   padding: 0.5rem;
   background-color: lighten($backgroundColor, 40%);
-  // border-radius: 5px;
+  border-radius: 5px;
   flex: 1 0 auto;
   height: 100%;
+}
+@media (max-width: 425px) {
+  .chat {
+    margin: 0.5rem auto 0;
+  }
 }
