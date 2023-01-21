@@ -1,0 +1,24 @@
+@import "../../styles/variables.module.scss";
+
+.menu-item {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0 0 0 1rem;
+  border: 2px solid $controlsBorderColor;
+  background-color: white;
+  border-radius: 10px;
+  width: fit-content;
+  text-align: center;
+  @media (max-width: 576px) {
+    margin: 0 0 1.5rem 0;
+  }
+  a {
+    display: block;
+    padding: 8px 10px;
+    color: $inputTextColor;
+  }
+  a.active {
+    text-decoration: underline;
+    color: rgb(235, 129, 0);
+  }
+}

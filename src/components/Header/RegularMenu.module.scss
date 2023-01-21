@@ -1,0 +1,12 @@
+@import "../../styles/variables.module.scss";
+
+.menu-wrapper {
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    padding-right: 1.5rem;
+  }
+  @media (max-width: 576px) {
+    display: none;
+  }
+}
