@@ -7,20 +7,21 @@ import ChatInputs from "../Chat/ChatInputs";
 import ChatMessages from "../Chat/ChatMessages";
 
 const ChatPage = () => {
-  const { currentMessage, status, error } = useSelector((state) => state.chat);
+  const { status, error } = useSelector((state) => state.chat);
   const { userData } = useSelector((state) => state.userInfo);
   const { localId, displayName } = userData;
 
   return (
     <ErrorModal isActive={status === "rejected"} errorMessage={error}>
       <section className={styles.chat}>
-        <ChatMessages
-          status={status}
-          userId={localId}
-          nickname={displayName}
-          currentMessage={currentMessage}
-        />
-        <ChatInputs userId={localId} />
+        <div className={styles.container}>
+          <ChatMessages
+            status={status}
+            userId={localId}
+            nickname={displayName}
+          />
+          <ChatInputs userId={localId} />
+        </div>
       </section>
     </ErrorModal>
   );

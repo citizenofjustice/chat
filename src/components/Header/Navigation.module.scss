@@ -1,11 +1,5 @@
 @import "../../styles/variables.module.scss";
-a:visited,
-a:link {
-  text-decoration: none;
-  color: black;
-  padding: 0.5rem 1rem;
-  color: $inputTextColor;
-}
+
 .header {
   display: flex;
   flex-direction: row;
@@ -14,11 +8,11 @@ a:link {
   height: 10vh;
   width: 100%;
   background-color: darken($backgroundColor, 15%);
-  border-bottom: 2px solid white;
   @media (max-width: 576px) {
   }
   .logo {
-    width: 150px;
+    padding-left: 1rem;
+    width: 120px;
     a {
       display: block;
       img {
@@ -28,4 +22,8 @@ a:link {
       }
     }
   }
+}
+a:visited,
+a:link {
+  text-decoration: none;
 }
