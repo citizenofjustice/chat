@@ -4,191 +4,285 @@
   $vw-context: (1400 * 0.01) * 1px;
   @return calc($target / $vw-context) * 1vw;
 }
-@function get-vh($target) {
-  $vw-context: (425 * 0.01) * 1px;
-  @return calc($target / $vw-context) * 1vw;
-}
 
 .homepage {
-  overflow: hidden;
+  width: 100%;
+  height: 100%;
   background-color: lighten($backgroundColor, 40%);
+  margin: 0 auto;
   .container {
-    // max-width: 1400px;
-    // max-height: 425px;
-    // display: flex;
-    // flex-direction: row;
-    flex: 1 1 auto;
-    .images {
-      display: flex;
-      flex-direction: row;
-      .left {
-        top: 44px;
-        left: 80px;
-        position: relative;
-        z-index: 1;
-      }
-      .middle {
-        position: relative;
-      }
-      .right {
-        top: 78px;
-        right: 80px;
-        position: relative;
-        z-index: 2;
-      }
-
-      .tablet {
-        width: 224px;
-        height: 272px;
-        margin: auto;
-        border: 8px rgb(202, 202, 202) solid;
-        border-top-width: 30px;
-        border-bottom-width: 30px;
-        border-radius: 24px;
-        outline: 1px solid rgb(67, 67, 67);
-        box-shadow: 2px 2px 2px rgb(67, 67, 67);
-        /* The screen (or content) of the device */
-        .content {
-          width: 14rem;
-          height: 17rem;
-          border: 1px solid rgb(67, 67, 67);
-          background-color: rgb(202, 202, 202);
-
-          img {
-            width: 14rem;
-            height: 17rem;
+    margin: 0 auto;
+    .css-figures {
+      margin: 0 auto;
+      max-width: 1600px;
+      .images {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        padding-bottom: 22px;
+        @media (min-width: 340px) {
+          padding-bottom: get-vw(80px);
+        }
+        .left {
+          top: 22px;
+          left: 35px;
+          position: relative;
+          z-index: 1;
+          @media (min-width: 340px) {
+            top: get-vw(92px);
+            left: get-vw(170px);
+          }
+        }
+        .middle {
+          top: 0;
+          position: relative;
+          @media (min-width: 340px) {
+            right: get-vw(-20px);
+          }
+        }
+        .right {
+          top: 31px;
+          right: 30px;
+          position: relative;
+          z-index: 2;
+          @media (min-width: 340px) {
+            top: get-vw(124px);
+            left: get-vw(-200px);
           }
         }
 
-        /* The horizontal line on the top of the device */
-        &:before {
-          content: "";
-          display: block;
-          width: 50px;
-          height: 3px;
-          position: absolute;
-          top: -15px;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          background: #333;
-          outline: 1px solid rgb(67, 67, 67);
-          border-radius: 10px;
-        }
-        /* The circle on the bottom of the device */
-        &:after {
-          content: "";
-          display: block;
-          width: 20px;
-          height: 20px;
-          position: absolute;
-          left: 50%;
-          bottom: -35px;
-          transform: translate(-50%, -50%);
-          background: rgb(181, 181, 181);
-          outline: 1px solid rgb(67, 67, 67);
-          border-radius: 50%;
-        }
-      }
-      /* The device with borders */
-      .smartphone {
-        width: 8rem;
-        height: 14rem;
-        margin: auto;
-        border: 6px rgb(202, 202, 202) solid;
-        border-top-width: 16px;
-        border-bottom-width: 25px;
-        border-radius: 14px;
-        outline: 1px solid rgb(67, 67, 67);
-        box-shadow: 2px 2px 2px rgb(67, 67, 67);
+        .tablet {
+          width: 56px;
+          height: 68px;
+          margin: auto;
+          border: 4px rgb(202, 202, 202) solid;
+          border-top-width: 7.5px;
+          border-bottom-width: 8px;
+          border-radius: 6px;
+          outline: 0.25px solid rgb(67, 67, 67);
+          box-shadow: 0.5px 0.5px 0.5px rgb(67, 67, 67);
+          @media (min-width: 340px) {
+            width: get-vw(224px);
+            height: get-vw(272px);
+            border: get-vw(16px) rgb(202, 202, 202) solid;
+            border-top-width: get-vw(30px);
+            border-bottom-width: get-vw(32px);
+            border-radius: get-vw(24px);
+          }
+          /* The screen (or content) of the device */
+          .content {
+            width: 56px;
+            height: 68px;
+            outline: 0.25px solid rgb(67, 67, 67);
+            background-color: rgb(202, 202, 202);
+            @media (min-width: 340px) {
+              width: get-vw(224px);
+              height: get-vw(272px);
+              outline: get-vw(1px) solid rgb(67, 67, 67);
+            }
+            img {
+              width: 56px;
+              height: 68px;
+              @media (min-width: 340px) {
+                width: get-vw(224px);
+                height: get-vw(272px);
+              }
+            }
+          }
 
-        /* The screen (or content) of the device */
-        .content {
-          width: 8rem;
-          height: 14rem;
-          border: 1px solid rgb(67, 67, 67);
-          background-color: rgb(202, 202, 202);
-          img {
-            width: 8rem;
-            height: 14rem;
+          /* The horizontal line on the top of the device */
+          &:before {
+            content: "";
+            display: block;
+            width: 12.5px;
+            height: 1.55px;
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #333;
+            border-radius: 2.25px;
+            @media (min-width: 340px) {
+              width: get-vw(50px);
+              height: get-vw(2px);
+              top: get-vw(-15px);
+              outline: get-vw(1px) solid rgb(67, 67, 67);
+              border-radius: get-vw(10px);
+            }
+          }
+          /* The circle on the bottom of the device */
+          &:after {
+            content: "";
+            display: block;
+            width: 3px;
+            height: 3px;
+            position: absolute;
+            left: 50%;
+            bottom: -8px;
+            transform: translate(-50%, -50%);
+            background: rgb(181, 181, 181);
+            outline: 0.25px solid rgb(67, 67, 67);
+            border-radius: 50%;
+            @media (min-width: 340px) {
+              width: get-vw(12px);
+              height: get-vw(12px);
+              bottom: get-vw(-28px);
+              outline: get-vw(1px) solid rgb(67, 67, 67);
+            }
+          }
+        }
+        /* The device with borders */
+        .smartphone {
+          width: 32px;
+          height: 56px;
+          margin: auto;
+          border: 1.5px rgb(202, 202, 202) solid;
+          border-top-width: 4px;
+          border-bottom-width: 4.25px;
+          border-radius: 3.5px;
+          outline: 0.25px solid rgb(67, 67, 67);
+          box-shadow: 0.5px 0.5px 0.5px rgb(67, 67, 67);
+          @media (min-width: 340px) {
+            width: get-vw(128px);
+            height: get-vw(224px);
+            border: get-vw(6px) rgb(202, 202, 202) solid;
+            border-top-width: get-vw(16px);
+            border-bottom-width: get-vw(25px);
+            border-radius: get-vw(14px);
+            outline: get-vw(1px) solid rgb(67, 67, 67);
+            box-shadow: get-vw(2px) get-vw(2px) get-vw(2px) rgb(67, 67, 67);
+          }
+          /* The screen (or content) of the device */
+          .content {
+            width: 32px;
+            height: 56px;
+            outline: 0.25px solid rgb(67, 67, 67);
+            background-color: rgb(202, 202, 202);
+            @media (min-width: 340px) {
+              width: get-vw(128px);
+              height: get-vw(224px);
+              outline: get-vw(1px) solid rgb(67, 67, 67);
+            }
+            img {
+              width: 32px;
+              height: 56px;
+              @media (min-width: 340px) {
+                width: get-vw(128px);
+                height: get-vw(224px);
+              }
+            }
+          }
+
+          /* The horizontal line on the top of the device */
+          &:before {
+            content: "";
+            display: block;
+            width: 4.5px;
+            height: 0.25px;
+            position: absolute;
+            top: -2.8px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #333;
+            border-radius: 2.5px;
+            @media (min-width: 340px) {
+              width: get-vw(30px);
+              height: get-vw(2px);
+              top: get-vw(-8px);
+              outline: get-vw(1px) solid rgb(67, 67, 67);
+              border-radius: get-vw(10px);
+            }
+          }
+          /* The circle on the bottom of the device */
+          &:after {
+            content: "";
+            display: block;
+            width: 2px;
+            height: 2px;
+            position: absolute;
+            left: 50%;
+            bottom: -4.5px;
+            transform: translate(-50%, -50%);
+            background: rgb(181, 181, 181);
+            outline: 0.25px solid rgb(67, 67, 67);
+            border-radius: 50%;
+            @media (min-width: 340px) {
+              width: get-vw(8px);
+              height: get-vw(8px);
+              bottom: get-vw(-22px);
+              outline: get-vw(1px) solid rgb(67, 67, 67);
+            }
           }
         }
 
-        /* The horizontal line on the top of the device */
-        &:before {
+        /* monitor screen */
+        .monitor {
+          width: 130px; //515px;
+          height: 82px; //327px;
+          border: 4px solid rgb(117, 117, 117); //1em
+          outline: 0.25px solid rgb(67, 67, 67); //1px
+          border-radius: 2px; //0.5em
+          z-index: 0;
+          position: relative;
+          @media (min-width: 340px) {
+            width: get-vw(515px); //515px;
+            height: get-vw(327px); //327px;
+            border: get-vw(16px) solid rgb(117, 117, 117); //1em
+            outline: get-vw(1px) solid rgb(67, 67, 67); //1px
+            border-radius: get-vw(8px); //0.5em
+          }
+          img {
+            border-radius: 0.5px; //2px
+            outline: 0.25px solid rgb(67, 67, 67); //1px
+            width: 100%;
+            @media (min-width: 340px) {
+              border-radius: get-vw(2px); //2px
+              outline: get-vw(1px) solid rgb(67, 67, 67); //1px
+            }
+          }
+        }
+        /* monitor stand (neck) */
+        .stand:before {
+          z-index: 0;
           content: "";
           display: block;
-          width: 30px;
-          height: 2px;
-          position: absolute;
-          top: -8px;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          background: #333;
-          outline: 1px solid rgb(67, 67, 67);
-          border-radius: 10px;
+          position: relative;
+          background: rgb(78, 78, 78);
+          outline: 1px solid rgb(67, 67, 67); //1px
+          width: 37.5px; //150px;
+          height: 12.5px; //50px
+          top: 102px; //358px
+          left: 52px; //185px
+          @media (min-width: 340px) {
+            width: get-vw(150px); //150px;
+            height: get-vw(50px); //50px
+            top: get-vw(409px); //358px
+            left: get-vw(185px); //185px
+          }
         }
-        /* The circle on the bottom of the device */
-        &:after {
+        /* monitor stand (bottom) */
+        .stand:after {
           content: "";
           display: block;
-          width: 15px;
-          height: 15px;
-          position: absolute;
-          left: 50%;
-          bottom: -28px;
-          transform: translate(-50%, -50%);
-          background: rgb(181, 181, 181);
+          position: relative;
+          background: rgb(117, 117, 117);
           outline: 1px solid rgb(67, 67, 67);
-          border-radius: 50%;
+          border-top-left-radius: 0.5em;
+          border-top-right-radius: 0.5em;
+          width: 75px; //300px
+          height: 3.75px; //15px
+          top: 10px;
+          left: 32.5px;
+          @media (min-width: 340px) {
+            width: get-vw(300px); //300px
+            height: get-vw(15px); //15px
+            top: get-vw(48px);
+            left: get-vw(105px);
+          }
         }
       }
-
-      /* monitor screen */
-      .monitor {
-        top: -50px;
-        width: 515px;
-        height: 327px;
-        border: solid 1em rgb(117, 117, 117);
-        outline: 1px solid rgb(67, 67, 67);
-        border-radius: 0.5em;
-        z-index: 0;
-        position: relative;
-        img {
-          border-radius: 2px;
-          outline: 1px solid rgb(67, 67, 67);
-          width: 100%;
-        }
-      }
-      /* monitor stand (neck) */
-      .stand:before {
-        z-index: 0;
-        content: "";
-        display: block;
-        position: relative;
-        background: rgb(78, 78, 78);
-        outline: 1px solid rgb(67, 67, 67);
-        width: 150px;
-        height: 50px;
-        top: 358px;
-        left: 185px;
-      }
-      /* monitor stand (bottom) */
-      .stand:after {
-        content: "";
-        display: block;
-        position: relative;
-        background: rgb(117, 117, 117);
-        outline: 1px solid rgb(67, 67, 67);
-        border-top-left-radius: 0.5em;
-        border-top-right-radius: 0.5em;
-        width: 300px;
-        height: 15px;
-        top: 0px;
-        left: 110px;
-      }
     }
-    .description {
-      color: white;
-    }
+  }
+  .description {
+    color: white;
   }
 }
