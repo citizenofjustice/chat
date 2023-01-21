@@ -14,28 +14,34 @@
 
 .error {
   position: fixed;
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
   row-gap: 1rem;
-  max-width: 50vw;
   background-color: $controlsBackColor;
   border: 2px solid $controlsBorderColor;
-  padding: 1rem;
+  padding: 1rem 0.5rem;
   border-radius: 10px;
   .content {
-    display: grid;
-    grid-template-columns: 1fr 9fr;
-    .icon {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    display: flex;
     .message {
       padding: 0.5rem 1rem;
+      justify-content: center;
       display: flex;
       align-items: center;
       color: darkred;
       font-weight: bold;
+    }
+    .icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 0.5rem;
+      @media (max-width: 320px) {
+        img {
+          width: 20px;
+        }
+      }
     }
   }
   .controls {

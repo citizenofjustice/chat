@@ -1,10 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { uiActions } from "../../store/ui-slice";
 import styles from "./SideMenu.module.scss";
 import MenuButton from "./MenuButton";
+import { authActions } from "../../store/auth-slice";
+import { userInfoActions } from "../../store/userInfo-slice";
 
-const ListItem = (props) => {
+const CustomLink = (props) => {
   const dispatch = useDispatch();
 
   const closeMenuHandler = () => {
@@ -13,13 +15,32 @@ const ListItem = (props) => {
 
   return (
     <li onClick={closeMenuHandler} className={styles[props.classText]}>
-      <Link to={props.path}>{props.children}</Link>
+      {props.isNav ? (
+        <NavLink
+          className={(navData) => (navData.isActive ? styles.active : "")}
+          to={props.path}
+        >
+          {props.children}
+        </NavLink>
+      ) : (
+        <Link to={props.path}>{props.children}</Link>
+      )}
     </li>
   );
 };
 
 const SideMenu = (props) => {
   const isAuth = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+
+  const logoutHandler = () => {
+    if (props.logoutTimer) {
+      clearTimeout(props.logoutTimer);
+      dispatch(authActions.logout());
+      dispatch(userInfoActions.clearUserInfo());
+    }
+  };
+
   return (
     <nav
       className={`${styles["side-nav"]} ${props.isActive && styles["active"]}`}
@@ -29,28 +50,28 @@ const SideMenu = (props) => {
           <MenuButton />
         </div>
         <ul className={styles["side-menu"]}>
-          <ListItem classText="menu-item" path="/">
+          <CustomLink classText="menu-item" path="/">
             Главная страница
-          </ListItem>
+          </CustomLink>
           {!isAuth && (
-            <ListItem classText="menu-item" path="/auth">
+            <CustomLink classText="menu-item" path="/auth">
               Вход
-            </ListItem>
+            </CustomLink>
           )}
           {isAuth && (
-            <ListItem classText="menu-item" path="/chat">
+            <CustomLink isNav={true} classText="menu-item" path="/chat">
               Чат
-            </ListItem>
+            </CustomLink>
           )}
           {isAuth && (
-            <ListItem classText="menu-item" path="/profile">
+            <CustomLink isNav={true} classText="menu-item" path="/profile">
               Профиль
-            </ListItem>
+            </CustomLink>
           )}
           {isAuth && (
-            <ListItem classText="menu-item" path="/">
+            <CustomLink onClick={logoutHandler} classText="menu-item" path="/">
               Выход
-            </ListItem>
+            </CustomLink>
           )}
         </ul>
       </div>

@@ -25,9 +25,9 @@ const ErrorModal = (props) => {
               <div className={styles.icon}>
                 <img src={errorSVG} alt="error icon" />
               </div>
-              <div className={styles.message}>
-                <div>{props.errorMessage}</div>
-              </div>
+              <p className={styles.message}>
+                {props.errorMessage.replace(/_/g, " ")}
+              </p>
             </div>
             <div className={styles.controls}>
               <span className={styles.button} onClick={closeErrorHandler}>

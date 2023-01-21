@@ -11,12 +11,13 @@ a:link {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1rem;
+  // padding: 0 1rem;
   height: 10vh;
+  width: 100%;
   background-color: darken($backgroundColor, 15%);
   border-bottom: 2px solid white;
   @media (max-width: 576px) {
-    padding: 0;
+    // padding: 0;
   }
   .logo {
     width: 100px;
@@ -30,6 +31,7 @@ a:link {
   .nav-links {
     display: flex;
     flex-direction: row;
+    margin-right: 1rem;
     a.active {
       text-decoration: underline;
       color: rgb(235, 129, 0);

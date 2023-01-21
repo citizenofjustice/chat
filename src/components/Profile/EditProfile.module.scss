@@ -1,7 +1,7 @@
 @import "../../styles/variables.module.scss";
 
 .edit-form {
-  padding: 1rem;
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,6 +12,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    @media (max-width: 320px) {
+      padding: 0;
+    }
     .changes {
       display: grid;
       grid-template-columns: 1fr 2fr 1fr;

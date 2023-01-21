@@ -10,12 +10,12 @@ const UserInfo = (props) => {
     <div className={styles["user-info"]}>
       <div className={styles.title}>
         Здарвствуйте,&nbsp;
-        <p className={styles.username}>{userData.displayName}</p>!
+        <p className={styles.username}>{userData.displayName}</p>
       </div>
       <ul className={styles.info}>
         <li className={styles["info-item"]}>
           <p className={styles.subtitle}>Электронная почта:</p>
-          <p>{props.email}</p>
+          <p className={styles["word-brake"]}>{props.email}</p>
         </li>
         <li className={styles["info-item"]}>
           <p className={styles.subtitle}>Зарегистрирован:</p>

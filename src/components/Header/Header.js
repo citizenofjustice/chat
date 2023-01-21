@@ -70,7 +70,7 @@ const Header = () => {
         </ul>
         <MenuButton />
       </nav>
-      <SideMenu isActive={isMenuShown} />
+      <SideMenu timer={logoutTimer} isActive={isMenuShown} />
     </>
   );
 };
