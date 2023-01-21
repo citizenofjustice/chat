@@ -1,0 +1,194 @@
+@import "../../styles/variables.module.scss";
+
+@function get-vw($target) {
+  $vw-context: (1400 * 0.01) * 1px;
+  @return calc($target / $vw-context) * 1vw;
+}
+@function get-vh($target) {
+  $vw-context: (425 * 0.01) * 1px;
+  @return calc($target / $vw-context) * 1vw;
+}
+
+.homepage {
+  overflow: hidden;
+  background-color: lighten($backgroundColor, 40%);
+  .container {
+    // max-width: 1400px;
+    // max-height: 425px;
+    // display: flex;
+    // flex-direction: row;
+    flex: 1 1 auto;
+    .images {
+      display: flex;
+      flex-direction: row;
+      .left {
+        top: 44px;
+        left: 80px;
+        position: relative;
+        z-index: 1;
+      }
+      .middle {
+        position: relative;
+      }
+      .right {
+        top: 78px;
+        right: 80px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .tablet {
+        width: 224px;
+        height: 272px;
+        margin: auto;
+        border: 8px rgb(202, 202, 202) solid;
+        border-top-width: 30px;
+        border-bottom-width: 30px;
+        border-radius: 24px;
+        outline: 1px solid rgb(67, 67, 67);
+        box-shadow: 2px 2px 2px rgb(67, 67, 67);
+        /* The screen (or content) of the device */
+        .content {
+          width: 14rem;
+          height: 17rem;
+          border: 1px solid rgb(67, 67, 67);
+          background-color: rgb(202, 202, 202);
+
+          img {
+            width: 14rem;
+            height: 17rem;
+          }
+        }
+
+        /* The horizontal line on the top of the device */
+        &:before {
+          content: "";
+          display: block;
+          width: 50px;
+          height: 3px;
+          position: absolute;
+          top: -15px;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: #333;
+          outline: 1px solid rgb(67, 67, 67);
+          border-radius: 10px;
+        }
+        /* The circle on the bottom of the device */
+        &:after {
+          content: "";
+          display: block;
+          width: 20px;
+          height: 20px;
+          position: absolute;
+          left: 50%;
+          bottom: -35px;
+          transform: translate(-50%, -50%);
+          background: rgb(181, 181, 181);
+          outline: 1px solid rgb(67, 67, 67);
+          border-radius: 50%;
+        }
+      }
+      /* The device with borders */
+      .smartphone {
+        width: 8rem;
+        height: 14rem;
+        margin: auto;
+        border: 6px rgb(202, 202, 202) solid;
+        border-top-width: 16px;
+        border-bottom-width: 25px;
+        border-radius: 14px;
+        outline: 1px solid rgb(67, 67, 67);
+        box-shadow: 2px 2px 2px rgb(67, 67, 67);
+
+        /* The screen (or content) of the device */
+        .content {
+          width: 8rem;
+          height: 14rem;
+          border: 1px solid rgb(67, 67, 67);
+          background-color: rgb(202, 202, 202);
+          img {
+            width: 8rem;
+            height: 14rem;
+          }
+        }
+
+        /* The horizontal line on the top of the device */
+        &:before {
+          content: "";
+          display: block;
+          width: 30px;
+          height: 2px;
+          position: absolute;
+          top: -8px;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: #333;
+          outline: 1px solid rgb(67, 67, 67);
+          border-radius: 10px;
+        }
+        /* The circle on the bottom of the device */
+        &:after {
+          content: "";
+          display: block;
+          width: 15px;
+          height: 15px;
+          position: absolute;
+          left: 50%;
+          bottom: -28px;
+          transform: translate(-50%, -50%);
+          background: rgb(181, 181, 181);
+          outline: 1px solid rgb(67, 67, 67);
+          border-radius: 50%;
+        }
+      }
+
+      /* monitor screen */
+      .monitor {
+        top: -50px;
+        width: 515px;
+        height: 327px;
+        border: solid 1em rgb(117, 117, 117);
+        outline: 1px solid rgb(67, 67, 67);
+        border-radius: 0.5em;
+        z-index: 0;
+        position: relative;
+        img {
+          border-radius: 2px;
+          outline: 1px solid rgb(67, 67, 67);
+          width: 100%;
+        }
+      }
+      /* monitor stand (neck) */
+      .stand:before {
+        z-index: 0;
+        content: "";
+        display: block;
+        position: relative;
+        background: rgb(78, 78, 78);
+        outline: 1px solid rgb(67, 67, 67);
+        width: 150px;
+        height: 50px;
+        top: 358px;
+        left: 185px;
+      }
+      /* monitor stand (bottom) */
+      .stand:after {
+        content: "";
+        display: block;
+        position: relative;
+        background: rgb(117, 117, 117);
+        outline: 1px solid rgb(67, 67, 67);
+        border-top-left-radius: 0.5em;
+        border-top-right-radius: 0.5em;
+        width: 300px;
+        height: 15px;
+        top: 0px;
+        left: 110px;
+      }
+    }
+    .description {
+      color: white;
+    }
+  }
+}

@@ -1,5 +1,7 @@
+@import "../../styles/variables.module.scss";
+
 .profile {
-  padding: 1rem;
+  padding-top: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -7,6 +9,9 @@
     text-align: center;
     a {
       display: block;
+      text-decoration: none;
+      color: $inputTextColor;
+      font-weight: bold;
     }
   }
 }
