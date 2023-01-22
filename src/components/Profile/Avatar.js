@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ref } from "firebase/storage";
 import { storage } from "../../firebase";
@@ -19,6 +19,7 @@ import styles from "./Avatar.module.scss";
 const Avatar = (props) => {
   const dispatch = useDispatch();
   const { uploadProfilePic } = useFirebase();
+  const imageInputField = useRef();
 
   const { token } = useSelector((state) => state.auth);
   const { userData, status, error } = useSelector((state) => state.userInfo);
@@ -47,7 +48,7 @@ const Avatar = (props) => {
       imageUpload,
       profilePicFolderRef
     );
-    setImageUpload(null);
+    imageInputField.current.value = null;
     setProfilePic(imageUrl);
     await setUserInfoToDb(localId, imageUrl, "profilePicture");
     dispatch(
@@ -56,7 +57,7 @@ const Avatar = (props) => {
   };
 
   const canelUploadHandler = () => {
-    setImageUpload(null);
+    imageInputField.current.value = null;
   };
 
   useEffect(() => {
@@ -82,7 +83,7 @@ const Avatar = (props) => {
                 }`}
                 htmlFor="image-upload"
               >
-                {!imageUpload ? "Выбрать файл" : "Файл другой файл"}
+                {!imageUpload ? "Выбрать изображение" : "Изображение выбрано"}
               </label>
               {!!imageUpload && (
                 <span
@@ -94,6 +95,7 @@ const Avatar = (props) => {
               )}
             </div>
             <input
+              ref={imageInputField}
               id="image-upload"
               type="file"
               onChange={(event) => {

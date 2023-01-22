@@ -1,8 +1,8 @@
 @import "../../styles/variables.module.scss";
 
 .inputs {
-  margin-top: 0.75rem;
-  position: sticky;
+  // margin-top: 0.75rem;
+  // position: sticky;
   bottom: 0;
   height: $messageInputHeigth;
   padding: 0.5rem;
@@ -12,6 +12,7 @@
     margin-top: 0;
   }
   @media (min-width: 768px) {
+    margin-top: 0.75rem;
     padding: 0 1rem;
     position: static;
   }
@@ -33,6 +34,8 @@
       font-size: $mainFontSize;
       outline: none;
       overflow: auto;
+      border-radius: 5px;
+      padding-left: 5px;
       &::-webkit-scrollbar {
         width: 5px;
       }

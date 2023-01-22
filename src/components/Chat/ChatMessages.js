@@ -61,7 +61,6 @@ const ChatMessages = (props) => {
   }, [isMounted]);
 
   return (
-    // <div className={styles.wrapper}>
     <div id="messageList" className={styles.messages}>
       <ul className={styles["message-list"]}>
         {messages.length > 0 &&
@@ -77,18 +76,17 @@ const ChatMessages = (props) => {
           ))}
         {/* {props.currentMessage !== null && (
           <ListItem
-          key={props.currentMessage.key}
-          isOwner={props.currentMessage.ownerId === props.userId}
-          message={props.currentMessage.message}
-          date={props.currentMessage.time}
-          avatar={props.currentMessage.profilePic}
-          nick={props.currentMessage.nickname}
+            key={props.currentMessage.key}
+            isOwner={props.currentMessage.ownerId === props.userId}
+            message={props.currentMessage.message}
+            date={props.currentMessage.time}
+            avatar={props.currentMessage.profilePic}
+            nick={props.currentMessage.nickname}
           />
         )} */}
       </ul>
       <div className={styles.bottom} ref={bottom} />
     </div>
-    // </div>
   );
 };
 
