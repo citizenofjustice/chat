@@ -2,26 +2,28 @@
 
 .chat {
   flex: 1 0 auto;
-  height: 90vh;
+  height: calc(100vh - $headerHeight);
   background-color: lighten($backgroundColor, 40%);
-  .container {
-    width: 100%;
+  @media (min-width: 768px) {
+    margin-top: 1rem;
+    width: 768px;
     border-radius: 5px;
+    height: calc(100vh - $headerHeight - 3rem);
+  }
+  .container {
+    padding: 1rem;
+    height: inherit;
+    @media (max-width: 768px) {
+      padding: 0;
+    }
   }
 }
+/*withot this while messages loading width is incorrect */
 @media (max-width: 768px) {
   .chat {
     width: 100%;
     .container {
       margin: 0;
-    }
-  }
-}
-@media (min-width: 768px) {
-  .chat {
-    width: 768px;
-    .container {
-      margin: 1rem 0;
     }
   }
 }

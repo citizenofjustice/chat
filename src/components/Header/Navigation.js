@@ -15,10 +15,7 @@ import styles from "./Navigation.module.scss";
 let logoutTimer;
 
 const Navigation = () => {
-  // getting data from localStorage
   const { expirationTime } = useSelector((state) => state.auth);
-
-  // const storageData = retriveAuthStorageData();
 
   const dispatch = useDispatch();
 

@@ -6,11 +6,13 @@ import appImageChat from "../../assets/monitorHQ.png";
 const HomePage = () => {
   return (
     <section className={styles.homepage}>
-      <h1 className={styles.title}>SIMPLE Chat</h1>
-      <p className={styles.tech}>
-        WEB-приложение разарботано на ReactJS, с использованием технологий
-        Redux/Redux-Toolkit, Redux-persist, React-Router, Firebase, SASS
-      </p>
+      <div className={styles.headers}>
+        <h1 className={styles.title}>SIMPLE Chat</h1>
+        <p className={styles.tech}>
+          WEB-приложение разарботано на ReactJS, с использованием технологий
+          Redux/Redux-Toolkit, Redux-persist, React-Router, Firebase, SASS
+        </p>
+      </div>
       <div className={styles.container}>
         <div className={styles["css-figures"]}>
           <div className={styles.images}>
@@ -32,7 +34,7 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      <div className={styles.desk} />
+      {/* <div className={styles.desk} /> */}
       {/* <div>
         <ul className={styles.description}>
           <li className={styles.items}>

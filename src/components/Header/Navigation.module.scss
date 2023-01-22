@@ -1,18 +1,19 @@
 @import "../../styles/variables.module.scss";
 
 .header {
+  position: sticky;
+  top: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: 10vh;
   width: 100%;
+  height: $headerHeight;
   background-color: darken($backgroundColor, 15%);
-  @media (max-width: 576px) {
-  }
   .logo {
     padding-left: 1rem;
-    width: 100px;
+    width: 80px;
+    min-width: 80px;
     a {
       display: block;
       img {

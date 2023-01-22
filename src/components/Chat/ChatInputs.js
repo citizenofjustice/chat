@@ -33,14 +33,16 @@ const ChatInputs = () => {
 
   return (
     <form className={styles.inputs} onSubmit={submitMessageHandler}>
-      <textarea
-        ref={messageInput}
-        className={styles["message-field"]}
-        onKeyUp={enterHandler}
-      />
-      <button className={styles.button}>
-        <img className={styles.icon} src={sendArrowImg} alt="send-icon" />
-      </button>
+      <div className={styles.wrapper}>
+        <textarea
+          ref={messageInput}
+          className={styles["message-field"]}
+          onKeyUp={enterHandler}
+        />
+        <button className={styles.button}>
+          <img className={styles.icon} src={sendArrowImg} alt="send-icon" />
+        </button>
+      </div>
     </form>
   );
 };
