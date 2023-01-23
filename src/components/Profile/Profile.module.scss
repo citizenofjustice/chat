@@ -6,12 +6,10 @@
   flex-direction: column;
   align-items: center;
   .button {
+    cursor: pointer;
     text-align: center;
-    a {
-      display: block;
-      text-decoration: none;
-      color: $inputTextColor;
-      font-weight: bold;
-    }
+    color: $inputTextColor;
+    font-weight: bold;
+    padding: 5px;
   }
 }

@@ -38,10 +38,6 @@
       .images {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
-        // padding-bottom: 22px;
-        @media (min-width: 340px) {
-          //   padding-bottom: get-vw(80px);
-        }
         .left {
           top: 22px;
           left: 35px;
@@ -237,29 +233,29 @@
 
         /* monitor screen */
         .monitor {
-          width: 130px; //515px;
-          height: 82px; //327px;
-          border: 4px solid rgb(117, 117, 117); //1em
-          outline: 0.25px solid rgb(67, 67, 67); //1px
-          border-radius: 2px; //0.5em
+          width: 130px;
+          height: 82px;
+          border: 4px solid rgb(117, 117, 117);
+          outline: 0.25px solid rgb(67, 67, 67);
+          border-radius: 2px;
           z-index: 2;
           position: relative;
           @media (min-width: 340px) {
-            width: get-vw(515px); //515px;
-            height: get-vw(327px); //327px;
-            border: get-vw(16px) solid rgb(117, 117, 117); //1em
-            outline: get-vw(1px) solid rgb(67, 67, 67); //1px
-            border-radius: get-vw(8px); //0.5em
+            width: get-vw(515px);
+            height: get-vw(327px);
+            border: get-vw(16px) solid rgb(117, 117, 117);
+            outline: get-vw(1px) solid rgb(67, 67, 67);
+            border-radius: get-vw(8px);
             box-shadow: get-vw(1px) get-vw(0px) get-vw(2px) get-vw(1px)
               rgb(67, 67, 67);
           }
           img {
-            border-radius: 0.5px; //2px
-            outline: 0.25px solid rgb(67, 67, 67); //1px
+            border-radius: 0.5px;
+            outline: 0.25px solid rgb(67, 67, 67);
             width: 100%;
             @media (min-width: 340px) {
-              border-radius: get-vw(2px); //2px
-              outline: get-vw(1px) solid rgb(67, 67, 67); //1px
+              border-radius: get-vw(2px);
+              outline: get-vw(1px) solid rgb(67, 67, 67);
             }
           }
         }
@@ -270,16 +266,16 @@
           display: block;
           position: relative;
           background: rgb(78, 78, 78);
-          outline: 1px solid rgb(67, 67, 67); //1px
-          width: 37.5px; //150px;
-          height: 12.5px; //50px
-          top: 102px; //358px
-          left: 52px; //185px
+          outline: 1px solid rgb(67, 67, 67);
+          width: 37.5px;
+          height: 12.5px;
+          top: 102px;
+          left: 52px;
           @media (min-width: 340px) {
-            width: get-vw(150px); //150px;
-            height: get-vw(50px); //50px
-            top: get-vw(409px); //358px
-            left: get-vw(185px); //185px
+            width: get-vw(150px);
+            height: get-vw(50px);
+            top: get-vw(409px);
+            left: get-vw(185px);
             box-shadow: get-vw(2px) get-vw(2px) get-vw(2px) rgb(67, 67, 67);
           }
         }
@@ -293,13 +289,13 @@
           outline: 1px solid rgb(67, 67, 67);
           border-top-left-radius: 0.5em;
           border-top-right-radius: 0.5em;
-          width: 75px; //300px
-          height: 3.75px; //15px
+          width: 75px;
+          height: 3.75px;
           top: 10px;
           left: 32.5px;
           @media (min-width: 340px) {
-            width: get-vw(300px); //300px
-            height: get-vw(15px); //15px
+            width: get-vw(300px);
+            height: get-vw(15px);
             top: get-vw(48px);
             left: get-vw(105px);
             box-shadow: get-vw(2px) get-vw(2px) get-vw(2px) rgb(67, 67, 67);
@@ -308,17 +304,4 @@
       }
     }
   }
-  // .desk {
-  //   background-color: lighten($backgroundColor, 40%);
-  //   position: sticky;
-  //   bottom: 0;
-  //   width: 100%;
-  //   grid-column-start: 1;
-  //   grid-column-end: 4;
-  //   box-shadow: 1px 0px 1px #333;
-  //   border-top: 1px solid rgb(147, 147, 147);
-  //   border-bottom: 1px solid #333;
-  //   height: 95px;
-  //   z-index: 0;
-  // }
 }

@@ -2,10 +2,17 @@ import { useSelector } from "react-redux";
 
 import CustomLink from "./CustomLink";
 import MenuButton from "../UI/MenuButton";
+
 import styles from "./SideMenu.module.scss";
 
+/**
+ * Component displaying side menu
+ * @param {*} props.onLogout - contains link to a function (logoutHandler)
+ * @param {*} props.isAuth - contains current authentication status
+ * @returns side menu
+ */
 const SideMenu = (props) => {
-  const isAuth = useSelector((state) => state.auth.user);
+  // selecting menu toggling status for changing className conditionally
   const { isMenuShown } = useSelector((state) => state.ui);
 
   return (
@@ -18,22 +25,22 @@ const SideMenu = (props) => {
           <CustomLink classText="menu-item" path="/">
             Главная страница
           </CustomLink>
-          {!isAuth && (
+          {!props.isAuth && (
             <CustomLink classText="menu-item" path="/auth">
               Вход
             </CustomLink>
           )}
-          {isAuth && (
+          {props.isAuth && (
             <CustomLink isNav={true} classText="menu-item" path="/chat">
               Чат
             </CustomLink>
           )}
-          {isAuth && (
+          {props.isAuth && (
             <CustomLink isNav={true} classText="menu-item" path="/profile">
               Профиль
             </CustomLink>
           )}
-          {isAuth && (
+          {props.isAuth && (
             <CustomLink logout={props.onLogout} classText="menu-item" path="/">
               Выход
             </CustomLink>

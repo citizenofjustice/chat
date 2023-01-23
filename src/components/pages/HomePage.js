@@ -1,8 +1,12 @@
-import styles from "./HomePage.module.scss";
 import appImageAuth from "../../assets/tabletHQ.png";
 import appImageInitial from "../../assets/initialHQ.png";
 import appImageChat from "../../assets/monitorHQ.png";
+import styles from "./HomePage.module.scss";
 
+/**
+ * Components that renders homepage (with css figures)
+ * @returns homepage
+ */
 const HomePage = () => {
   return (
     <section className={styles.homepage}>
@@ -34,50 +38,6 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      {/* <div className={styles.desk} /> */}
-      {/* <div>
-        <ul className={styles.description}>
-          <li className={styles.items}>
-            <div>Функционал</div>
-            <ul>
-              <li>Регистрация/Авторизация пользователя.</li>
-              <li>
-                Загрузка изображения на сервер, для отображения иконки профиля.
-              </li>
-              <li>
-                Взаимодействие с базой данных, для отправки и получения
-                сообщений. Обновление сообщений в реальном времени.
-              </li>
-              <li>
-                Смена электронной почты, пароля, никнейма, изображения профиля.
-                С поледующим отражением изменений в чате.
-              </li>
-              <li>
-                Хранение токена для сохранения сессии авторизированного
-                пользователя в течении часа. По его истечению принудительное
-                удаление токена.
-              </li>
-              <li>
-                Наличие адаптивной верстки для удобного отображения на
-                устройствах с разной шириной экрана.
-              </li>
-            </ul>
-          </li>
-          <li>
-            <div>Для начала работы:</div>
-            <div>
-              Чтобы воспользоваться приложением, требуется регистрация с помощью
-              электронной почты и пароля. Затем нужно инициализировать учетную
-              запись, а именно выбрать никнейм, который бутет отображаться у вас
-              в чате.
-            </div>
-          </li>
-          <li>
-            <div>Title</div>
-            <div>description description description</div>
-          </li>
-        </ul>
-      </div> */}
     </section>
   );
 };

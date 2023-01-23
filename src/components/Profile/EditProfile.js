@@ -9,19 +9,33 @@ import {
 } from "../../store/userInfo-slice";
 
 import ErrorModal from "../UI/ErrorModal";
+
 import styles from "./EditProfile.module.scss";
 
+/**
+ * Component for changing user credentials and sending new data to redux, database
+ * @returns edit profile form
+ */
 const EditProfile = () => {
   const dispatch = useDispatch();
-
-  const { token } = useSelector((state) => state.auth);
-  const { userData, status, error } = useSelector((state) => state.userInfo);
   const changeNicknameInput = useRef();
   const changeUsernameInput = useRef();
   const changePasswordInput = useRef();
 
-  const changeNicknameHandler = () => {
+  // selecting data from redux
+  const { token } = useSelector((state) => state.auth);
+  const { userData, status, error } = useSelector((state) => state.userInfo);
+
+  /**
+   * Function for changing nickname entered by user
+   * @param {*} event - onClick event trigered by pressing a button
+   * @returns {void}
+   */
+  const changeNicknameHandler = (event) => {
+    event.preventDefault();
     const enteredNickname = changeNicknameInput.current.value.trim();
+
+    // if input field has text
     if (enteredNickname.length > 0) {
       dispatch(
         updateProfile({ type: "nickname", token, newValue: enteredNickname })
@@ -31,13 +45,25 @@ const EditProfile = () => {
     }
   };
 
-  const changeUsernameHandler = async () => {
+  /**
+   * Function for changing username entered by user
+   * @param {*} event - onClick event trigered by pressing a button
+   * @returns {void}
+   */
+  const changeUsernameHandler = (event) => {
+    event.preventDefault();
     const enteredUsername = changeUsernameInput.current.value.trim();
     dispatch(changeUsername({ token, enteredUsername }));
     changeUsernameInput.current.value = "";
   };
 
-  const changePasswordHandler = () => {
+  /**
+   * Function for changing password entered by user
+   * @param {*} event - onClick event trigered by pressing a button
+   * @returns {void}
+   */
+  const changePasswordHandler = (event) => {
+    event.preventDefault();
     const enteredPassword = changePasswordInput.current.value;
     dispatch(changePassword({ token, enteredPassword }));
     changePasswordInput.current.value = "";
@@ -50,9 +76,9 @@ const EditProfile = () => {
           <div className={styles.changes}>
             <label htmlFor="nickname-change">Никнейм:</label>
             <input ref={changeNicknameInput} type="text" id="nickname-change" />
-            <span className={styles.button} onClick={changeNicknameHandler}>
+            <button className={styles.button} onClick={changeNicknameHandler}>
               Поменять
-            </span>
+            </button>
           </div>
           <div className={styles.changes}>
             <label htmlFor="username-change">Почта/Логин:</label>
@@ -61,9 +87,9 @@ const EditProfile = () => {
               type="email"
               id="username-change"
             />
-            <span className={styles.button} onClick={changeUsernameHandler}>
+            <button className={styles.button} onClick={changeUsernameHandler}>
               Поменять
-            </span>
+            </button>
           </div>
           <div className={styles.changes}>
             <label htmlFor="password-change">Пароль: </label>
@@ -72,9 +98,9 @@ const EditProfile = () => {
               type="password"
               id="password-change"
             />
-            <span className={styles.button} onClick={changePasswordHandler}>
+            <button className={styles.button} onClick={changePasswordHandler}>
               Поменять
-            </span>
+            </button>
           </div>
         </form>
       </section>

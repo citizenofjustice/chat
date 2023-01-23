@@ -11,7 +11,7 @@ import styles from "./ChatMessages.module.scss";
 
 /**
  * Component responsable for displaying and reloading messages
- * @param {*} props - containing userData's localId and displayName
+ * @param {string} props.userId - containing userData's localId
  * @returns messages list
  */
 const ChatMessages = (props) => {

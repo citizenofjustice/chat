@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import Layout from "./components/Layout/Layout";
-import EditProfile from "./components/Profile/EditProfile";
 import AuthPage from "./components/pages/AuthPage";
 import ProtectedRoutes from "./components/pages/ProtectedRoutes";
 import ProfilePage from "./components/pages/ProfilePage";
@@ -58,9 +57,7 @@ function App() {
                 {!hasNick && <InitialSettingsPage />}
               </ProtectedRoutes>
             }
-          >
-            <Route path="edit-profile" element={<EditProfile />} />
-          </Route>
+          />
           <Route
             path="chat"
             element={

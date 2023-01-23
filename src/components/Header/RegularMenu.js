@@ -1,26 +1,29 @@
-import { useSelector } from "react-redux";
-
 import CustomLink from "./CustomLink";
+
 import styles from "./RegularMenu.module.scss";
 
+/**
+ * Component displaying navigation panel at the top of the app
+ * @param {*} props.onLogout - contains link to a function (logoutHandler)
+ * @param {*} props.isAuth - contains current authentication status
+ * @returns navigation panel
+ */
 const RegularMenu = (props) => {
-  const isAuth = useSelector((state) => state.auth.user);
-
   return (
     <div className={styles["menu-wrapper"]}>
       <ul className={styles["nav-links"]}>
-        {!isAuth && <CustomLink path="/auth">Вход</CustomLink>}
-        {isAuth && (
+        {!props.isAuth && <CustomLink path="/auth">Вход</CustomLink>}
+        {props.isAuth && (
           <CustomLink isNav={true} path="/chat">
             Чат
           </CustomLink>
         )}
-        {isAuth && (
+        {props.isAuth && (
           <CustomLink isNav={true} path="/profile">
             Профиль
           </CustomLink>
         )}
-        {isAuth && (
+        {props.isAuth && (
           <CustomLink logout={props.onLogout} path="/">
             Выход
           </CustomLink>
