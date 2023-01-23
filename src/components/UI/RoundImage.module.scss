@@ -1,11 +1,30 @@
-.img-wrapper {
+@import "../../styles/variables.module.scss";
+
+.initial-pic {
   padding: 5px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  outline: 2px solid $controlsBorderColor;
+}
+.profile-pic {
+  flex: 1 1 auto;
   width: 150px;
   height: 150px;
-  .image {
-    width: 100%;
-    height: 100%;
-    outline: 2px solid black;
-    border-radius: 50%;
-  }
+  padding: 5px;
+  border-radius: 50%;
+  outline: 2px solid $controlsBorderColor;
+}
+.chat-pic {
+  flex: 0 0 30px;
+  margin-top: 0.5rem;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  outline: 1px solid rgb(185, 185, 185);
+}
+.image {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
 }

@@ -1,11 +1,13 @@
-import Header from "../Header/Header";
+import { Outlet } from "react-router-dom";
+import Navigation from "../Header/Navigation";
+import styles from "./Layout.module.scss";
 
-const Layout = (props) => {
+const Layout = () => {
   return (
-    <>
-      <Header />
-      <main style={{ margin: "0 auto" }}>{props.children}</main>
-    </>
+    <main className={styles.main}>
+      <Navigation />
+      <Outlet />
+    </main>
   );
 };
 

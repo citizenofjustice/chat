@@ -1,8 +1,63 @@
+@import "../../styles/variables.module.scss";
+
 .avatar {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   .replace {
     margin: 0 auto;
+  }
+  .file {
+    margin: 0 0 0 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .upload {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .cancel {
+        margin-left: 0.5rem;
+        color: red;
+      }
+    }
+    input[type="file"] {
+      display: none;
+    }
+    .button {
+      max-width: 110px;
+      margin: 0.5rem 0;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      border-radius: 10px;
+      padding: 5px;
+      background-color: $controlsBackColor;
+      border: 2px solid $controlsBorderColor;
+      font-family: $mainFont;
+      font-size: $mainFontSize;
+      color: $inputTextColor;
+      font-weight: bold;
+      text-align: center;
+      &:hover {
+        background-color: $backgroundColor;
+        color: $controlsBackColor;
+      }
+    }
+    .highlight {
+      outline: $inputOutline;
+      background-color: $backgroundColor;
+      color: $controlsBackColor;
+    }
+  }
+}
+@media (max-width: 400px) {
+  .avatar {
+    display: flex;
+    flex-direction: column;
+    .file {
+      margin: 0.5rem 0 0 0;
+    }
   }
 }

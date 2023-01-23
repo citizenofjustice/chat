@@ -1,0 +1,65 @@
+@import "../../styles/variables.module.scss";
+
+.initial {
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .title {
+    font-size: $mainFontSize * 1.25;
+    text-align: center;
+    color: $inputTextColor;
+    font-weight: bold;
+    margin-bottom: 2rem;
+  }
+  .initial-info {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    .nickname {
+      margin-bottom: 1rem;
+      @media (max-width: 576px) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      label {
+        text-align: center;
+        margin: 0 1rem 0 0;
+        @media (max-width: 576px) {
+          margin: 0 0 1rem 0;
+        }
+      }
+      input {
+        margin: 0 auto;
+        padding: 5px;
+        outline: none;
+        border-radius: 5px;
+        @media (max-width: 320px) {
+          width: 100%;
+          box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+        }
+      }
+    }
+    input,
+    button {
+      font-size: $mainFontSize;
+      font-family: $mainFont;
+    }
+    button {
+      display: flex;
+      justify-content: center;
+      border-radius: 10px;
+      padding: 5px 10px;
+      background-color: $controlsBackColor;
+      border: 2px solid $controlsBorderColor;
+      color: $inputTextColor;
+      font-weight: bold;
+      text-align: center;
+    }
+  }
+}

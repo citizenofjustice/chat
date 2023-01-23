@@ -1,0 +1,30 @@
+@import "../../styles/variables.module.scss";
+
+.header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: $headerHeight;
+  background-color: darken($backgroundColor, 15%);
+  .logo {
+    padding-left: 1rem;
+    width: 80px;
+    min-width: 80px;
+    a {
+      display: block;
+      img {
+        border: 2px solid white;
+        border-radius: 10px;
+        width: 100%;
+      }
+    }
+  }
+}
+a:visited,
+a:link {
+  text-decoration: none;
+}

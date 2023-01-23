@@ -1,0 +1,29 @@
+@import "../../styles/variables.module.scss";
+
+.chat {
+  flex: 1 0 auto;
+  height: calc(100vh - $headerHeight);
+  background-color: lighten($backgroundColor, 40%);
+  @media (min-width: 768px) {
+    margin-top: 1rem;
+    width: 768px;
+    border-radius: 5px;
+    height: calc(100vh - $headerHeight - 3rem);
+  }
+  .container {
+    padding: 1rem;
+    height: inherit;
+    @media (max-width: 768px) {
+      padding: 0;
+    }
+  }
+}
+/*withot this while messages loading width is incorrect */
+@media (max-width: 768px) {
+  .chat {
+    width: 100%;
+    .container {
+      margin: 0;
+    }
+  }
+}

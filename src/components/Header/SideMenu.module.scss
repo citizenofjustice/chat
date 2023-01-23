@@ -1,0 +1,32 @@
+@import "../../styles/variables.module.scss";
+
+.side-nav {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  z-index: 50;
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0px;
+  padding-top: 1rem;
+  padding-right: 0px;
+  background-color: lighten($backgroundColor, 30%);
+  transform: translateX(-100%);
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  .menu-wrapper {
+    display: flex;
+    flex-direction: column;
+    .burger {
+      float: right;
+    }
+    .side-menu {
+      display: flex;
+      flex-direction: column;
+      margin: 1rem;
+    }
+  }
+}
+.active {
+  transform: translateX(0);
+}

@@ -1,18 +1,27 @@
 import styles from "./UserInfo.module.scss";
+import { useSelector } from "react-redux";
 
-const UserInfo = () => {
+const UserInfo = (props) => {
+  const { userData } = useSelector((state) => state.userInfo);
+  const dateObj = new Date(+userData.createdAt);
+  const creationDate = dateObj.toLocaleString();
+
   return (
     <div className={styles["user-info"]}>
-      <p className={styles.title}>UserInfo</p>
-      <div>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum
+      <div className={styles.title}>
+        Здарвствуйте,&nbsp;
+        <p className={styles.username}>{userData.displayName}</p>
       </div>
+      <ul className={styles.info}>
+        <li className={styles["info-item"]}>
+          <p className={styles.subtitle}>Электронная почта:</p>
+          <p className={styles["word-brake"]}>{props.email}</p>
+        </li>
+        <li className={styles["info-item"]}>
+          <p className={styles.subtitle}>Зарегистрирован:</p>
+          <p>{creationDate}</p>
+        </li>
+      </ul>
     </div>
   );
 };

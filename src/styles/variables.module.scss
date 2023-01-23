@@ -5,3 +5,7 @@ $backgroundColor: rgb(39, 151, 29);
 $inputTextColor: darken($backgroundColor, 15%);
 $controlsBackColor: lighten($backgroundColor, 50%);
 $controlsBorderColor: mix($backgroundColor, gray, 15%);
+$inputOutline: 2px solid rgb(237, 200, 114);
+$headerHeight: 80px;
+$messageInputHeigth: 100px;
+$messageInputMobile: 60px;

@@ -5,7 +5,41 @@
   display: flex;
   flex-direction: column;
   .title {
-    text-align: center;
+    display: inline-flex;
+    justify-content: center;
     font-size: $mainFontSize * 1.25;
+    margin: 1rem 0;
+    .username {
+      color: darkred;
+      font-weight: bold;
+    }
+  }
+  .info {
+    .info-item {
+      display: flex;
+      margin-bottom: 1rem;
+      .subtitle {
+        font-weight: bold;
+        margin: 0 2rem 0 0;
+      }
+      .word-brake {
+        word-break: break-all;
+      }
+    }
+  }
+  @media (max-width: 425px) {
+    .title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .info {
+      .info-item {
+        flex-direction: column;
+        .subtitle {
+          margin: 0 0 0.5rem 0;
+        }
+      }
+    }
   }
 }
