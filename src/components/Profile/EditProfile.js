@@ -14,8 +14,8 @@ import styles from "./EditProfile.module.scss";
 const EditProfile = () => {
   const dispatch = useDispatch();
 
-  const { user, token, status, error } = useSelector((state) => state.auth);
-  const { userData } = useSelector((state) => state.userInfo);
+  const { token } = useSelector((state) => state.auth);
+  const { userData, status, error } = useSelector((state) => state.userInfo);
   const changeNicknameInput = useRef();
   const changeUsernameInput = useRef();
   const changePasswordInput = useRef();
@@ -33,12 +33,8 @@ const EditProfile = () => {
 
   const changeUsernameHandler = async () => {
     const enteredUsername = changeUsernameInput.current.value.trim();
-    if (user !== enteredUsername) {
-      dispatch(changeUsername({ token, enteredUsername }));
-      changeUsernameInput.current.value = "";
-    } else {
-      alert("Введенный логин/почта совпадает с текущим.");
-    }
+    dispatch(changeUsername({ token, enteredUsername }));
+    changeUsernameInput.current.value = "";
   };
 
   const changePasswordHandler = () => {

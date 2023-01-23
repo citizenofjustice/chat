@@ -8,7 +8,8 @@ import styles from "./Profile.module.scss";
 
 const Profile = () => {
   // getting username data from redux
-  const user = useSelector((state) => state.auth.user);
+  // const user = useSelector((state) => state.auth.user);
+  const { userData } = useSelector((state) => state.userInfo);
 
   const navigate = useNavigate();
 
@@ -27,7 +28,7 @@ const Profile = () => {
   return (
     <section className={styles.profile}>
       <Avatar page="profile-pic" />
-      <UserInfo email={user} />
+      <UserInfo email={userData.email} />
       <span className={styles.button} onClick={editLinkChangeHandler}>
         {isEdit && <Link to="edit-profile">Скрыть</Link>}
         {!isEdit && <Link to="/profile">Редактировать данные</Link>}

@@ -48,6 +48,7 @@ const Avatar = (props) => {
       imageUpload,
       profilePicFolderRef
     );
+    setImageUpload(null);
     imageInputField.current.value = null;
     setProfilePic(imageUrl);
     await setUserInfoToDb(localId, imageUrl, "profilePicture");
@@ -57,6 +58,7 @@ const Avatar = (props) => {
   };
 
   const canelUploadHandler = () => {
+    setImageUpload(null);
     imageInputField.current.value = null;
   };
 

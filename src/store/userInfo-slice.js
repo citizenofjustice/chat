@@ -3,7 +3,14 @@ import { authActions } from "./auth-slice";
 
 export const changeUsername = createAsyncThunk(
   "userInfo/changeUsername",
-  async function ({ token, enteredUsername }, { rejectWithValue, dispatch }) {
+  async function (
+    { token, enteredUsername },
+    { rejectWithValue, dispatch, getState }
+  ) {
+    const { email } = getState().userInfo.userData;
+    if (email === enteredUsername) {
+      return rejectWithValue("Введенная почта сопадает с ее текущим значением");
+    }
     const updateUsernameUrl =
       "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAr3wMeLPj8j_PmyxeoGF-nmAvltdSjdlQ";
     try {
