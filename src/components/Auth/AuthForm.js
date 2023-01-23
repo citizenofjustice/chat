@@ -1,32 +1,47 @@
 import { useRef, useState } from "react";
-// import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
 import { authUser } from "../../store/auth-slice";
 
 import ErrorModal from "../UI/ErrorModal";
 import Button from "../UI/Button";
 import LoadingSpinner from "../UI/LoadingSpinner";
+
 import styles from "./AuthForm.module.scss";
 
+/**
+ * Component responsable for user authentication
+ * @returns authentication form
+ */
 const AuthForm = () => {
-  // const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // selecting status and error from redux Auth slice
   const { status, error } = useSelector((state) => state.auth);
-  // state that stores auth form mode
+
+  // defining state for changing authentication mode
   const [isLogin, setIsLogin] = useState(true);
+
+  const dispatch = useDispatch();
   const emailInput = useRef();
   const passwordInput = useRef();
 
-  // handling login/sing-in data submittion
+  /**
+   * handling login/sing-in data submittion
+   * @param {*} event - when form is submitted
+   * @returns {void}
+   */
   const submitHandler = (event) => {
     event.preventDefault();
     const enteredEmail = emailInput.current.value;
     const enteredPassword = passwordInput.current.value;
 
+    // calling authUser function from auth slice
     dispatch(authUser({ isLogin, enteredEmail, enteredPassword }));
   };
 
-  // function for changing form auth mode
+  /**
+   * function for toggling authentication mode
+   * @returns {void}
+   */
   const authModeHandler = () => {
     setIsLogin((prevState) => !prevState);
   };
