@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: App.js</title>
+    <title>JSDoc: Source: components/pages/InitialSettingsPage.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: App.js</h1>
+    <h1 class="page-title">Source: components/pages/InitialSettingsPage.js</h1>
 
     
 
@@ -26,81 +26,87 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
+            <pre class="prettyprint source linenums"><code>import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
-import Layout from "./components/Layout/Layout";
-import AuthPage from "./components/pages/AuthPage";
-import ProtectedRoutes from "./components/pages/ProtectedRoutes";
-import ProfilePage from "./components/pages/ProfilePage";
-import HomePage from "./components/pages/HomePage";
-import InitialSettingsPage from "./components/pages/InitialSettingsPage";
-import ChatPage from "./components/pages/ChatPage";
+import { setUserInfoToDb, updateProfile } from "../../store/userInfo-slice";
 
-import "./styles/reset.module.scss";
-import "./styles/variables.module.scss";
-import styles from "./styles/app.module.scss";
+import Avatar from "../Profile/Avatar";
+import ErrorModal from "../UI/ErrorModal";
+import LoadingSpinner from "../UI/LoadingSpinner";
+
+import styles from "./InitialSettingsPage.module.scss";
 
 /**
- * Main application component containing all routes and pages
- * @returns routes and pages components
+ * Initial settings page, where user needs to choose nickname
+ * @returns Initial settings page
  */
-function App() {
-  // Selecting data from redux
-  const { token } = useSelector((state) => state.auth);
+const InitialSettingsPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const nicknameInput = useRef();
+
+  // selecting data from redux
+  const { token, status, error } = useSelector((state) => state.auth);
   const { userData } = useSelector((state) => state.userInfo);
 
   /**
-   * used for authentication status check
-   * @const {boolean}
+   * Function that saves entered nickname
+   * @param {*} event - onClick event, when user clicks on button
    */
-  const isAuth = token !== null;
+  const saveNicknameHandler = (event) => {
+    event.preventDefault();
+    const enteredNickname = nicknameInput.current.value.trim();
 
-  /**
-   * used for conditional routing if user does not has nickname
-   * @const {boolean}
-   */
-  const hasNick = userData.displayName !== undefined;
+    // if input field has some text
+    if (enteredNickname.length > 0) {
+      // saving nickname to redux
+      dispatch(
+        updateProfile({
+          type: "nickname",
+          token,
+          newValue: enteredNickname,
+        })
+      );
+      // setting nickname data to database
+      setUserInfoToDb(userData.localId, enteredNickname, "nickname");
+      nicknameInput.current.value = "";
+
+      // navigating to a homepage
+      navigate("/");
+    }
+  };
 
   return (
-    &lt;div className={styles.container}>
-      &lt;Routes>
-        &lt;Route path="/" element={&lt;Layout />}>
-          &lt;Route index element={&lt;HomePage />}>&lt;/Route>
-          &lt;Route
-            path="auth"
-            element={
-              &lt;ProtectedRoutes allowed={!isAuth} path="/">
-                &lt;AuthPage />
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route
-            path="profile"
-            element={
-              &lt;ProtectedRoutes allowed={isAuth} path="/auth">
-                {hasNick &amp;&amp; &lt;ProfilePage />}
-                {!hasNick &amp;&amp; &lt;InitialSettingsPage />}
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route
-            path="chat"
-            element={
-              &lt;ProtectedRoutes allowed={isAuth} path="/auth">
-                {hasNick &amp;&amp; &lt;ChatPage />}
-                {!hasNick &amp;&amp; &lt;InitialSettingsPage />}
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route path="*" element={&lt;p>Page not found&lt;/p>} />
-        &lt;/Route>
-      &lt;/Routes>
-    &lt;/div>
+    &lt;ErrorModal isActive={status === "rejected"} errorMessage={error}>
+      {status === "pending" ? (
+        &lt;LoadingSpinner />
+      ) : (
+        &lt;section className={styles.initial}>
+          &lt;p className={styles.title}>Инициализация профиля:&lt;/p>
+          &lt;Avatar page="initial-pic" />
+          &lt;form className={styles["initial-info"]}>
+            &lt;span className={styles.nickname}>
+              &lt;label>Введите имя пользователя:&lt;/label>
+              &lt;input
+                autoFocus
+                ref={nicknameInput}
+                type="text"
+                id="set-nickname"
+              />
+            &lt;/span>
+            &lt;button className={styles.button} onClick={saveNicknameHandler}>
+              Готово
+            &lt;/button>
+          &lt;/form>
+        &lt;/section>
+      )}
+    &lt;/ErrorModal>
   );
-}
+};
 
-export default App;
+export default InitialSettingsPage;
 </code></pre>
         </article>
     </section>

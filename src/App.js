@@ -24,15 +24,13 @@ function App() {
 
   /**
    * used for authentication status check
-   * @constant
-   * @type {boolean}
+   * @const {boolean}
    */
   const isAuth = token !== null;
 
   /**
    * used for conditional routing if user does not has nickname
-   * @constant
-   * @type {boolean}
+   * @const {boolean}
    */
   const hasNick = userData.displayName !== undefined;
 

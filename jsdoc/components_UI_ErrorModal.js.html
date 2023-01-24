@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/UI/ErrorModal.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/UI/ErrorModal.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useDispatch } from "react-redux";
+
+import { authActions } from "../../store/auth-slice";
+import { chatActions } from "../../store/chat-slice";
+import { userInfoActions } from "../../store/userInfo-slice";
+
+import errorSVG from "../../assets/errorIcon.svg";
+import styles from "./ErrorModal.module.scss";
+
+/**
+ * Array containing translated error messages (from Firebase)
+ * @const {Array}
+ */
+const errors = [
+  {
+    originalError: "EMAIL_NOT_FOUND",
+    errorMessage: "Пользователь с такой электронной почтой не зарегистриован",
+  },
+  {
+    originalError: "EMAIL_EXISTS",
+    errorMessage: "Пользователь с такой почтой уже зарегистрирован",
+  },
+  {
+    originalError: "INVALID_PASSWORD",
+    errorMessage: "Неверный пароль",
+  },
+  {
+    originalError: "WEAK_PASSWORD : Password should be at least 6 characters",
+    errorMessage:
+      "Ненадежный пароль, в пароле должно быть как минимум 6 символов",
+  },
+  {
+    originalError: "INVALID_EMAIL",
+    errorMessage: "Некорректный e-mail. Проверьте правильность ввода",
+  },
+  {
+    originalError: "CREDENTIAL_TOO_OLD_LOGIN_AGAIN",
+    errorMessage:
+      "Ваши учетные данные устарели. Попробуйте перезайти в учетную запись",
+  },
+];
+
+/**
+ * Custom error pop up component with error message
+ * @param {string} props.errorMessage - error message
+ * @param {boolean} props.isActive - boolean state which tells us if error should be displayed
+ * @returns pop up displaying error message
+ */
+const ErrorModal = (props) => {
+  const dispatch = useDispatch();
+
+  /**
+   * function that handles error closing on button click
+   * @param {*} event - onClick event triggerd by button press
+   */
+  const closeErrorHandler = (event) => {
+    event.preventDefault();
+    dispatch(authActions.closeError());
+    dispatch(userInfoActions.closeError());
+    dispatch(chatActions.closeError());
+  };
+
+  /**
+   * Finding error recived through props if exist in array (with translated errors)
+   * and setting found array element into constant / or set const as undefined
+   * @const {object | undefined}
+   */
+  const errorText = errors.find(
+    (item) => item.originalError === props.errorMessage
+  );
+
+  return (
+    &lt;>
+      {props.children}
+      {props.isActive &amp;&amp; (
+        &lt;div className={styles["background-modal"]}>
+          &lt;div className={styles.error}>
+            &lt;div className={styles.content}>
+              &lt;div className={styles.icon}>
+                &lt;img src={errorSVG} alt="error icon" />
+              &lt;/div>
+              &lt;p className={styles.message}>
+                {errorText !== undefined
+                  ? errorText.errorMessage
+                  : props.errorMessage}
+              &lt;/p>
+            &lt;/div>
+            &lt;div className={styles.controls}>
+              &lt;button className={styles.button} onClick={closeErrorHandler}>
+                Закрыть
+              &lt;/button>
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+      )}
+    &lt;/>
+  );
+};
+
+export default ErrorModal;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthForm">AuthForm</a></li><li><a href="global.html#AuthPage">AuthPage</a></li><li><a href="global.html#Avatar">Avatar</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ChatInputs">ChatInputs</a></li><li><a href="global.html#ChatMessages">ChatMessages</a></li><li><a href="global.html#ChatPage">ChatPage</a></li><li><a href="global.html#CustomLink">CustomLink</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#ErrorModal">ErrorModal</a></li><li><a href="global.html#FormatDate">FormatDate</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#InitialSettingsPage">InitialSettingsPage</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#LoadingSpinner">LoadingSpinner</a></li><li><a href="global.html#MenuButton">MenuButton</a></li><li><a href="global.html#Message">Message</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#ProtectedRoutes">ProtectedRoutes</a></li><li><a href="global.html#RegularMenu">RegularMenu</a></li><li><a href="global.html#RoundImage">RoundImage</a></li><li><a href="global.html#SideMenu">SideMenu</a></li><li><a href="global.html#UserInfo">UserInfo</a></li><li><a href="global.html#calcRemainingTime">calcRemainingTime</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#getUserInfoFromDb">getUserInfoFromDb</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#setUserInfoToDb">setUserInfoToDb</a></li><li><a href="global.html#useFirebase">useFirebase</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Tue Jan 24 2023 23:11:32 GMT+0300 (Москва, стандартное время)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

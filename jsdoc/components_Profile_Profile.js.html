@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: App.js</title>
+    <title>JSDoc: Source: components/Profile/Profile.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: App.js</h1>
+    <h1 class="page-title">Source: components/Profile/Profile.js</h1>
 
     
 
@@ -26,81 +26,43 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
+            <pre class="prettyprint source linenums"><code>import { useState } from "react";
 
-import Layout from "./components/Layout/Layout";
-import AuthPage from "./components/pages/AuthPage";
-import ProtectedRoutes from "./components/pages/ProtectedRoutes";
-import ProfilePage from "./components/pages/ProfilePage";
-import HomePage from "./components/pages/HomePage";
-import InitialSettingsPage from "./components/pages/InitialSettingsPage";
-import ChatPage from "./components/pages/ChatPage";
+import Avatar from "./Avatar";
+import UserInfo from "./UserInfo";
+import EditProfile from "./EditProfile";
 
-import "./styles/reset.module.scss";
-import "./styles/variables.module.scss";
-import styles from "./styles/app.module.scss";
+import styles from "./Profile.module.scss";
 
 /**
- * Main application component containing all routes and pages
- * @returns routes and pages components
+ * Component that renders user profile element (avatar, user info, edit form)
+ * @returns user profile
  */
-function App() {
-  // Selecting data from redux
-  const { token } = useSelector((state) => state.auth);
-  const { userData } = useSelector((state) => state.userInfo);
+const Profile = () => {
+  // defining state for changing and displaying link name accordingly
+  const [isEdit, setIsEdit] = useState(false);
 
   /**
-   * used for authentication status check
-   * @const {boolean}
+   * function that handles edit form toggle
+   * @returns {void}
    */
-  const isAuth = token !== null;
-
-  /**
-   * used for conditional routing if user does not has nickname
-   * @const {boolean}
-   */
-  const hasNick = userData.displayName !== undefined;
+  const editLinkChangeHandler = () => {
+    setIsEdit((prevState) => !prevState);
+  };
 
   return (
-    &lt;div className={styles.container}>
-      &lt;Routes>
-        &lt;Route path="/" element={&lt;Layout />}>
-          &lt;Route index element={&lt;HomePage />}>&lt;/Route>
-          &lt;Route
-            path="auth"
-            element={
-              &lt;ProtectedRoutes allowed={!isAuth} path="/">
-                &lt;AuthPage />
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route
-            path="profile"
-            element={
-              &lt;ProtectedRoutes allowed={isAuth} path="/auth">
-                {hasNick &amp;&amp; &lt;ProfilePage />}
-                {!hasNick &amp;&amp; &lt;InitialSettingsPage />}
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route
-            path="chat"
-            element={
-              &lt;ProtectedRoutes allowed={isAuth} path="/auth">
-                {hasNick &amp;&amp; &lt;ChatPage />}
-                {!hasNick &amp;&amp; &lt;InitialSettingsPage />}
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route path="*" element={&lt;p>Page not found&lt;/p>} />
-        &lt;/Route>
-      &lt;/Routes>
-    &lt;/div>
+    &lt;section className={styles.profile}>
+      &lt;Avatar page="profile-pic" />
+      &lt;UserInfo />
+      &lt;span className={styles.button} onClick={editLinkChangeHandler}>
+        {isEdit ? "Скрыть" : "Редактировать данные"}
+      &lt;/span>
+      {isEdit &amp;&amp; &lt;EditProfile />}
+    &lt;/section>
   );
-}
+};
 
-export default App;
+export default Profile;
 </code></pre>
         </article>
     </section>

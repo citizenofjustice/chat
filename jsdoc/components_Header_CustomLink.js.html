@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: App.js</title>
+    <title>JSDoc: Source: components/Header/CustomLink.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: App.js</h1>
+    <h1 class="page-title">Source: components/Header/CustomLink.js</h1>
 
     
 
@@ -26,81 +26,61 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
+            <pre class="prettyprint source linenums"><code>import { useDispatch, useSelector } from "react-redux";
+import { Link, NavLink } from "react-router-dom";
 
-import Layout from "./components/Layout/Layout";
-import AuthPage from "./components/pages/AuthPage";
-import ProtectedRoutes from "./components/pages/ProtectedRoutes";
-import ProfilePage from "./components/pages/ProfilePage";
-import HomePage from "./components/pages/HomePage";
-import InitialSettingsPage from "./components/pages/InitialSettingsPage";
-import ChatPage from "./components/pages/ChatPage";
+import { uiActions } from "../../store/ui-slice";
 
-import "./styles/reset.module.scss";
-import "./styles/variables.module.scss";
-import styles from "./styles/app.module.scss";
+import styles from "./CustomLink.module.scss";
+
+// custom NavLink/Link with path passed through props
 
 /**
- * Main application component containing all routes and pages
- * @returns routes and pages components
+ * Custom component used for conditional renering of Router's Link/NavLink
+ * @param {string} props.path - contains wanted path, where user would be sent
+ * @param {boolean} props.isNav - tells us if this should be Link or NavLink
+ * @param {*} props.logout - prop for triggerring logoutHandler function
+ * @param {string} props.children - contains wanted link's name
+ * @returns navigation link
  */
-function App() {
-  // Selecting data from redux
-  const { token } = useSelector((state) => state.auth);
-  const { userData } = useSelector((state) => state.userInfo);
+const CustomLink = (props) => {
+  const dispatch = useDispatch();
+  // selecting state for showing/hiding SideMenu
+  const { isMenuShown } = useSelector((state) => state.ui);
 
   /**
-   * used for authentication status check
-   * @const {boolean}
+   * function that handles SideMenu toggling
+   * @returns {void}
    */
-  const isAuth = token !== null;
-
-  /**
-   * used for conditional routing if user does not has nickname
-   * @const {boolean}
-   */
-  const hasNick = userData.displayName !== undefined;
+  const closeSideMenuHandler = () => {
+    if (isMenuShown) {
+      dispatch(uiActions.toggleMenu());
+    }
+  };
 
   return (
-    &lt;div className={styles.container}>
-      &lt;Routes>
-        &lt;Route path="/" element={&lt;Layout />}>
-          &lt;Route index element={&lt;HomePage />}>&lt;/Route>
-          &lt;Route
-            path="auth"
-            element={
-              &lt;ProtectedRoutes allowed={!isAuth} path="/">
-                &lt;AuthPage />
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route
-            path="profile"
-            element={
-              &lt;ProtectedRoutes allowed={isAuth} path="/auth">
-                {hasNick &amp;&amp; &lt;ProfilePage />}
-                {!hasNick &amp;&amp; &lt;InitialSettingsPage />}
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route
-            path="chat"
-            element={
-              &lt;ProtectedRoutes allowed={isAuth} path="/auth">
-                {hasNick &amp;&amp; &lt;ChatPage />}
-                {!hasNick &amp;&amp; &lt;InitialSettingsPage />}
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route path="*" element={&lt;p>Page not found&lt;/p>} />
-        &lt;/Route>
-      &lt;/Routes>
-    &lt;/div>
+    &lt;li
+      onClick={closeSideMenuHandler}
+      key={props.path}
+      className={styles["menu-item"]}
+    >
+      {props.isNav === true ? (
+        &lt;NavLink
+          to={props.path}
+          className={(navData) => (navData.isActive ? styles.active : "")}
+        >
+          {props.children}
+        &lt;/NavLink>
+      ) : (
+        &lt;Link onClick={props.logout} to={props.path}>
+          {props.children}
+        &lt;/Link>
+      )}
+    &lt;/li>
   );
-}
+};
 
-export default App;
+export default CustomLink;
 </code></pre>
         </article>
     </section>

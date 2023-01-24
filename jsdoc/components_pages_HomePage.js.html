@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: App.js</title>
+    <title>JSDoc: Source: components/pages/HomePage.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: App.js</h1>
+    <h1 class="page-title">Source: components/pages/HomePage.js</h1>
 
     
 
@@ -26,81 +26,51 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
-
-import Layout from "./components/Layout/Layout";
-import AuthPage from "./components/pages/AuthPage";
-import ProtectedRoutes from "./components/pages/ProtectedRoutes";
-import ProfilePage from "./components/pages/ProfilePage";
-import HomePage from "./components/pages/HomePage";
-import InitialSettingsPage from "./components/pages/InitialSettingsPage";
-import ChatPage from "./components/pages/ChatPage";
-
-import "./styles/reset.module.scss";
-import "./styles/variables.module.scss";
-import styles from "./styles/app.module.scss";
+            <pre class="prettyprint source linenums"><code>import appImageAuth from "../../assets/tabletHQ.png";
+import appImageInitial from "../../assets/initialHQ.png";
+import appImageChat from "../../assets/monitorHQ.png";
+import styles from "./HomePage.module.scss";
 
 /**
- * Main application component containing all routes and pages
- * @returns routes and pages components
+ * Components that renders homepage (with css figures)
+ * @returns homepage
  */
-function App() {
-  // Selecting data from redux
-  const { token } = useSelector((state) => state.auth);
-  const { userData } = useSelector((state) => state.userInfo);
-
-  /**
-   * used for authentication status check
-   * @const {boolean}
-   */
-  const isAuth = token !== null;
-
-  /**
-   * used for conditional routing if user does not has nickname
-   * @const {boolean}
-   */
-  const hasNick = userData.displayName !== undefined;
-
+const HomePage = () => {
   return (
-    &lt;div className={styles.container}>
-      &lt;Routes>
-        &lt;Route path="/" element={&lt;Layout />}>
-          &lt;Route index element={&lt;HomePage />}>&lt;/Route>
-          &lt;Route
-            path="auth"
-            element={
-              &lt;ProtectedRoutes allowed={!isAuth} path="/">
-                &lt;AuthPage />
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route
-            path="profile"
-            element={
-              &lt;ProtectedRoutes allowed={isAuth} path="/auth">
-                {hasNick &amp;&amp; &lt;ProfilePage />}
-                {!hasNick &amp;&amp; &lt;InitialSettingsPage />}
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route
-            path="chat"
-            element={
-              &lt;ProtectedRoutes allowed={isAuth} path="/auth">
-                {hasNick &amp;&amp; &lt;ChatPage />}
-                {!hasNick &amp;&amp; &lt;InitialSettingsPage />}
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route path="*" element={&lt;p>Page not found&lt;/p>} />
-        &lt;/Route>
-      &lt;/Routes>
-    &lt;/div>
+    &lt;section className={styles.homepage}>
+      &lt;div className={styles.headers}>
+        &lt;h1 className={styles.title}>SIMPLE Chat&lt;/h1>
+        &lt;p className={styles.tech}>
+          WEB-приложение разарботано на ReactJS, с использованием технологий
+          Redux/Redux-Toolkit, Redux-persist, React-Router, Firebase, SASS
+        &lt;/p>
+      &lt;/div>
+      &lt;div className={styles.container}>
+        &lt;div className={styles["css-figures"]}>
+          &lt;div className={styles.images}>
+            &lt;div className={`${styles.tablet} ${styles.left}`}>
+              &lt;div className={styles.content}>
+                &lt;img src={appImageAuth} alt="app-promo" />
+              &lt;/div>
+            &lt;/div>
+            &lt;div className={`${styles.stand} ${styles.middle}`}>
+              &lt;div className={styles.monitor}>
+                &lt;img src={appImageChat} alt="app-promo" />
+              &lt;/div>
+            &lt;/div>
+            &lt;div className={`${styles.smartphone} ${styles.right}`}>
+              &lt;div className={styles.content}>
+                &lt;img src={appImageInitial} alt="app-promo" />
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+    &lt;/section>
   );
-}
+};
 
-export default App;
+export default HomePage;
 </code></pre>
         </article>
     </section>

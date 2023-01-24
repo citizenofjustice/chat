@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: App.js</title>
+    <title>JSDoc: Source: store/chat-slice.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: App.js</h1>
+    <h1 class="page-title">Source: store/chat-slice.js</h1>
 
     
 
@@ -26,81 +26,89 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
+            <pre class="prettyprint source linenums"><code>import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import Layout from "./components/Layout/Layout";
-import AuthPage from "./components/pages/AuthPage";
-import ProtectedRoutes from "./components/pages/ProtectedRoutes";
-import ProfilePage from "./components/pages/ProfilePage";
-import HomePage from "./components/pages/HomePage";
-import InitialSettingsPage from "./components/pages/InitialSettingsPage";
-import ChatPage from "./components/pages/ChatPage";
+export const sendMessage = createAsyncThunk(
+  "chat/sendMessage",
+  /**
+   * sendMessage async function for sending the message to a chat
+   * @returns {void | object}
+   */
+  async function ({ message, time }, { rejectWithValue, getState }) {
+    // getting current user local id from redux
+    const { localId } = getState().userInfo.userData;
+    try {
+      // sending the POST request to database for adding message by the current user
+      const response = await fetch(
+        `https://chat-app-1e2f6-default-rtdb.europe-west1.firebasedatabase.app/messages/${localId}.json`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            message,
+            time,
+            ownerId: localId,
+          }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-import "./styles/reset.module.scss";
-import "./styles/variables.module.scss";
-import styles from "./styles/app.module.scss";
+      // reciving data from request
+      const data = await response.json();
+
+      // if request has failed throw error
+      if (!response.ok) {
+        let errorMessage = "Message sending failed!";
+        if (data &amp;&amp; data.error &amp;&amp; data.error.message) {
+          errorMessage = data.error.message;
+        }
+        throw new Error(errorMessage);
+      }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 /**
- * Main application component containing all routes and pages
- * @returns routes and pages components
+ * object with initail state for a redux toolkit slice
+ * @const {object}
  */
-function App() {
-  // Selecting data from redux
-  const { token } = useSelector((state) => state.auth);
-  const { userData } = useSelector((state) => state.userInfo);
+const initialState = {
+  status: null,
+  error: null,
+};
 
-  /**
-   * used for authentication status check
-   * @const {boolean}
-   */
-  const isAuth = token !== null;
+// defining slice for redux toolkit
+const chatSlice = createSlice({
+  name: "chat",
+  initialState,
+  reducers: {
+    /**
+     * Clear state on error modal closing
+     * @param {*} state
+     */
+    closeError(state) {
+      state.error = null;
+      state.status = null;
+    },
+  },
+  extraReducers: {
+    [sendMessage.pending]: (state) => {
+      state.status = "pending";
+      state.error = null;
+    },
+    [sendMessage.fulfilled]: (state) => {
+      state.status = "resolved";
+    },
+    [sendMessage.rejected]: (state, action) => {
+      state.status = "rejected";
+      state.error = action.payload;
+    },
+  },
+});
 
-  /**
-   * used for conditional routing if user does not has nickname
-   * @const {boolean}
-   */
-  const hasNick = userData.displayName !== undefined;
-
-  return (
-    &lt;div className={styles.container}>
-      &lt;Routes>
-        &lt;Route path="/" element={&lt;Layout />}>
-          &lt;Route index element={&lt;HomePage />}>&lt;/Route>
-          &lt;Route
-            path="auth"
-            element={
-              &lt;ProtectedRoutes allowed={!isAuth} path="/">
-                &lt;AuthPage />
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route
-            path="profile"
-            element={
-              &lt;ProtectedRoutes allowed={isAuth} path="/auth">
-                {hasNick &amp;&amp; &lt;ProfilePage />}
-                {!hasNick &amp;&amp; &lt;InitialSettingsPage />}
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route
-            path="chat"
-            element={
-              &lt;ProtectedRoutes allowed={isAuth} path="/auth">
-                {hasNick &amp;&amp; &lt;ChatPage />}
-                {!hasNick &amp;&amp; &lt;InitialSettingsPage />}
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route path="*" element={&lt;p>Page not found&lt;/p>} />
-        &lt;/Route>
-      &lt;/Routes>
-    &lt;/div>
-  );
-}
-
-export default App;
+export const chatActions = chatSlice.actions;
+export default chatSlice;
 </code></pre>
         </article>
     </section>

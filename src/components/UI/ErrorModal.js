@@ -1,11 +1,16 @@
 import { useDispatch } from "react-redux";
 
+import { authActions } from "../../store/auth-slice";
+import { chatActions } from "../../store/chat-slice";
+import { userInfoActions } from "../../store/userInfo-slice";
+
 import errorSVG from "../../assets/errorIcon.svg";
 import styles from "./ErrorModal.module.scss";
-import { authActions } from "../../store/auth-slice";
-import { userInfoActions } from "../../store/userInfo-slice";
-import { chatActions } from "../../store/chat-slice";
 
+/**
+ * Array containing translated error messages (from Firebase)
+ * @const {Array}
+ */
 const errors = [
   {
     originalError: "EMAIL_NOT_FOUND",
@@ -35,15 +40,31 @@ const errors = [
   },
 ];
 
+/**
+ * Custom error pop up component with error message
+ * @param {string} props.errorMessage - error message
+ * @param {boolean} props.isActive - boolean state which tells us if error should be displayed
+ * @returns pop up displaying error message
+ */
 const ErrorModal = (props) => {
   const dispatch = useDispatch();
 
-  const closeErrorHandler = () => {
+  /**
+   * function that handles error closing on button click
+   * @param {*} event - onClick event triggerd by button press
+   */
+  const closeErrorHandler = (event) => {
+    event.preventDefault();
     dispatch(authActions.closeError());
     dispatch(userInfoActions.closeError());
     dispatch(chatActions.closeError());
   };
 
+  /**
+   * Finding error recived through props if exist in array (with translated errors)
+   * and setting found array element into constant / or set const as undefined
+   * @const {object | undefined}
+   */
   const errorText = errors.find(
     (item) => item.originalError === props.errorMessage
   );
@@ -65,9 +86,9 @@ const ErrorModal = (props) => {
               </p>
             </div>
             <div className={styles.controls}>
-              <span className={styles.button} onClick={closeErrorHandler}>
+              <button className={styles.button} onClick={closeErrorHandler}>
                 Закрыть
-              </span>
+              </button>
             </div>
           </div>
         </div>

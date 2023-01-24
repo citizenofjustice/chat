@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: hooks/use-firebase.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: hooks/use-firebase.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+  deleteObject,
+  ref,
+} from "firebase/storage";
+import { storage } from "../firebase";
+
+/**
+ * Custom react hook containing functions for firebase storage manipulations
+ * @returns {object} with links to the functions
+ */
+const useFirebase = () => {
+  /**
+   * Function that handles file upload in firebase storage
+   * @param {object} filePath - firebase ref with path will be put
+   * @param {File} profilePic - file being uploaded
+   * @param {object} oldImagesFolder - firebase ref for a path with previously uploadaed files
+   * @returns {string} fileUrl so we could set said url into &lt;img> tag to src='' attribute
+   */
+  const uploadProfilePic = async (filePath, profilePic, oldImagesFolder) => {
+    try {
+      // delete old file if there was any
+      await deleteOldProfilePics(oldImagesFolder);
+
+      // set constant with path in firebase storage where file is stored
+      const snapshot = await uploadBytes(filePath, profilePic);
+
+      // getting the url to a file and settinig it to a const
+      const fileUrl = await getDownloadURL(snapshot.ref);
+      return fileUrl;
+    } catch (error) {
+      throw new Error("upload failed. ", error);
+    }
+  };
+
+  /**
+   * Function that deletes all previously uploaded images by a current user
+   * @param {object} folderRef - firebase ref object with a path to images folder
+   * @returns {void}
+   */
+  const deleteOldProfilePics = async (folderRef) => {
+    try {
+      // getting object with arrays of data about folder content
+      const fileList = await listAll(folderRef);
+
+      // if items array of obj is not empty proceed, otherwise stop execution
+      if (fileList.items.length > 0) {
+        // for each elemet of items array delete said element from storage
+        fileList.items.forEach((item) => {
+          deleteObject(item);
+        });
+      }
+    } catch (error) {
+      throw new Error("delete failed. ", error);
+    }
+  };
+
+  /**
+   * Function that gets url of last picture uploaded by user
+   * @param {string} userId - user identificatior
+   * @returns {string | null} if picture exist return it, otherwise return null
+   */
+  const getUserPictureUrl = async (userId) => {
+    try {
+      // defining firebase folder ref for user profile picture folder
+      const folderRef = ref(storage, `${userId}/profile-picture`);
+
+      // getting the contents of folder
+      const fileList = await listAll(folderRef);
+
+      // extracting the last element from array of files in the folder
+      const latestProfilePic = fileList.items.pop();
+
+      // if file exists proceed, otherwise return null
+      if (latestProfilePic) {
+        // get the url of found file in storage
+        const url = await getDownloadURL(latestProfilePic);
+        return url;
+      } else return null;
+    } catch (error) {
+      throw new Error("url fetchig has failed", error);
+    }
+  };
+
+  return {
+    uploadProfilePic,
+    deleteOldProfilePics,
+    getUserPictureUrl,
+  };
+};
+
+export default useFirebase;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthForm">AuthForm</a></li><li><a href="global.html#AuthPage">AuthPage</a></li><li><a href="global.html#Avatar">Avatar</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ChatInputs">ChatInputs</a></li><li><a href="global.html#ChatMessages">ChatMessages</a></li><li><a href="global.html#ChatPage">ChatPage</a></li><li><a href="global.html#CustomLink">CustomLink</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#ErrorModal">ErrorModal</a></li><li><a href="global.html#FormatDate">FormatDate</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#InitialSettingsPage">InitialSettingsPage</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#LoadingSpinner">LoadingSpinner</a></li><li><a href="global.html#MenuButton">MenuButton</a></li><li><a href="global.html#Message">Message</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#ProtectedRoutes">ProtectedRoutes</a></li><li><a href="global.html#RegularMenu">RegularMenu</a></li><li><a href="global.html#RoundImage">RoundImage</a></li><li><a href="global.html#SideMenu">SideMenu</a></li><li><a href="global.html#UserInfo">UserInfo</a></li><li><a href="global.html#calcRemainingTime">calcRemainingTime</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#getUserInfoFromDb">getUserInfoFromDb</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#setUserInfoToDb">setUserInfoToDb</a></li><li><a href="global.html#useFirebase">useFirebase</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Tue Jan 24 2023 23:11:32 GMT+0300 (Москва, стандартное время)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: App.js</title>
+    <title>JSDoc: Source: components/Header/Navigation.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: App.js</h1>
+    <h1 class="page-title">Source: components/Header/Navigation.js</h1>
 
     
 
@@ -26,81 +26,77 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
+            <pre class="prettyprint source linenums"><code>import { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
-import Layout from "./components/Layout/Layout";
-import AuthPage from "./components/pages/AuthPage";
-import ProtectedRoutes from "./components/pages/ProtectedRoutes";
-import ProfilePage from "./components/pages/ProfilePage";
-import HomePage from "./components/pages/HomePage";
-import InitialSettingsPage from "./components/pages/InitialSettingsPage";
-import ChatPage from "./components/pages/ChatPage";
+import { authActions, calcRemainingTime } from "../../store/auth-slice";
+import { userInfoActions } from "../../store/userInfo-slice";
 
-import "./styles/reset.module.scss";
-import "./styles/variables.module.scss";
-import styles from "./styles/app.module.scss";
+import SideMenu from "./SideMenu";
+import RegularMenu from "./RegularMenu";
+import MenuButton from "../UI/MenuButton";
+
+import logoImg from "../../assets/logo.png";
+import styles from "./Navigation.module.scss";
+
+// variable for storing timeout and clearing it when time runs out
+let logoutTimer;
 
 /**
- * Main application component containing all routes and pages
- * @returns routes and pages components
+ * Comonent responsable for user navigation across the app
+ * @returns navigation panel/menu
  */
-function App() {
-  // Selecting data from redux
-  const { token } = useSelector((state) => state.auth);
-  const { userData } = useSelector((state) => state.userInfo);
+const Navigation = () => {
+  const dispatch = useDispatch();
 
-  /**
-   * used for authentication status check
-   * @const {boolean}
-   */
-  const isAuth = token !== null;
+  // selecting the token from redux, to be certian that user is authentickated
+  const isAuth = useSelector((state) => state.auth.token);
 
-  /**
-   * used for conditional routing if user does not has nickname
-   * @const {boolean}
-   */
-  const hasNick = userData.displayName !== undefined;
+  // selecting time of token expiration from redux
+  const { expirationTime } = useSelector((state) => state.auth);
+
+  // Callback function that handles user logout
+  const logoutHandler = useCallback(() => {
+    if (logoutTimer) {
+      // if timer exist clear it
+      clearTimeout(logoutTimer);
+      // clear redux states
+      dispatch(authActions.logout());
+      dispatch(userInfoActions.clearUserInfo());
+    }
+  }, [dispatch]);
+
+  // useEffect for triggerring token expiration calculaions
+  useEffect(() => {
+    if (!!expirationTime) {
+      // format string into number of miliseconds
+      const duration = calcRemainingTime(expirationTime);
+      clearTimeout(logoutTimer);
+      // set timer
+      logoutTimer = setTimeout(() => {
+        logoutHandler();
+      }, duration);
+    }
+  }, [expirationTime, logoutHandler]);
 
   return (
-    &lt;div className={styles.container}>
-      &lt;Routes>
-        &lt;Route path="/" element={&lt;Layout />}>
-          &lt;Route index element={&lt;HomePage />}>&lt;/Route>
-          &lt;Route
-            path="auth"
-            element={
-              &lt;ProtectedRoutes allowed={!isAuth} path="/">
-                &lt;AuthPage />
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route
-            path="profile"
-            element={
-              &lt;ProtectedRoutes allowed={isAuth} path="/auth">
-                {hasNick &amp;&amp; &lt;ProfilePage />}
-                {!hasNick &amp;&amp; &lt;InitialSettingsPage />}
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route
-            path="chat"
-            element={
-              &lt;ProtectedRoutes allowed={isAuth} path="/auth">
-                {hasNick &amp;&amp; &lt;ChatPage />}
-                {!hasNick &amp;&amp; &lt;InitialSettingsPage />}
-              &lt;/ProtectedRoutes>
-            }
-          />
-          &lt;Route path="*" element={&lt;p>Page not found&lt;/p>} />
-        &lt;/Route>
-      &lt;/Routes>
-    &lt;/div>
+    &lt;>
+      &lt;nav className={styles.header}>
+        &lt;div className={styles.logo}>
+          &lt;Link to="/">
+            &lt;img src={logoImg} alt="logo" />
+          &lt;/Link>
+        &lt;/div>
+        &lt;RegularMenu isAuth={isAuth} onLogout={logoutHandler} />
+        &lt;MenuButton />
+      &lt;/nav>
+      &lt;SideMenu isAuth={isAuth} onLogout={logoutHandler} />
+    &lt;/>
   );
-}
+};
 
-export default App;
+export default Navigation;
 </code></pre>
         </article>
     </section>
