@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/Profile/EditProfile.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/Profile/EditProfile.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  changeUsername,
+  changePassword,
+  updateProfile,
+  setUserInfoToDb,
+} from "../../store/userInfo-slice";
+
+import ErrorModal from "../UI/ErrorModal";
+
+import styles from "./EditProfile.module.scss";
+
+/**
+ * Component for changing user credentials and sending new data to redux, database
+ * @returns edit profile form
+ */
+const EditProfile = () => {
+  const dispatch = useDispatch();
+  const changeNicknameInput = useRef();
+  const changeUsernameInput = useRef();
+  const changePasswordInput = useRef();
+
+  // selecting data from redux
+  const { token } = useSelector((state) => state.auth);
+  const { userData, status, error } = useSelector((state) => state.userInfo);
+
+  /**
+   * Function for changing nickname entered by user
+   * @param {*} event - onClick event trigered by pressing a button
+   * @returns {void}
+   */
+  const changeNicknameHandler = (event) => {
+    event.preventDefault();
+    const enteredNickname = changeNicknameInput.current.value.trim();
+
+    // if input field has text
+    if (enteredNickname.length > 0) {
+      dispatch(
+        updateProfile({ type: "nickname", token, newValue: enteredNickname })
+      );
+      setUserInfoToDb(userData.localId, enteredNickname, "nickname");
+      changeNicknameInput.current.value = "";
+    }
+  };
+
+  /**
+   * Function for changing username entered by user
+   * @param {*} event - onClick event trigered by pressing a button
+   * @returns {void}
+   */
+  const changeUsernameHandler = (event) => {
+    event.preventDefault();
+    const enteredUsername = changeUsernameInput.current.value.trim();
+    dispatch(changeUsername({ token, enteredUsername }));
+    changeUsernameInput.current.value = "";
+  };
+
+  /**
+   * Function for changing password entered by user
+   * @param {*} event - onClick event trigered by pressing a button
+   * @returns {void}
+   */
+  const changePasswordHandler = (event) => {
+    event.preventDefault();
+    const enteredPassword = changePasswordInput.current.value;
+    dispatch(changePassword({ token, enteredPassword }));
+    changePasswordInput.current.value = "";
+  };
+
+  return (
+    &lt;ErrorModal isActive={status === "rejected"} errorMessage={error}>
+      &lt;section className={styles["edit-form"]}>
+        &lt;form className={styles.form}>
+          &lt;div className={styles.changes}>
+            &lt;label htmlFor="nickname-change">Никнейм:&lt;/label>
+            &lt;input ref={changeNicknameInput} type="text" id="nickname-change" />
+            &lt;button className={styles.button} onClick={changeNicknameHandler}>
+              Поменять
+            &lt;/button>
+          &lt;/div>
+          &lt;div className={styles.changes}>
+            &lt;label htmlFor="username-change">Почта/Логин:&lt;/label>
+            &lt;input
+              ref={changeUsernameInput}
+              type="email"
+              id="username-change"
+            />
+            &lt;button className={styles.button} onClick={changeUsernameHandler}>
+              Поменять
+            &lt;/button>
+          &lt;/div>
+          &lt;div className={styles.changes}>
+            &lt;label htmlFor="password-change">Пароль: &lt;/label>
+            &lt;input
+              ref={changePasswordInput}
+              type="password"
+              id="password-change"
+            />
+            &lt;button className={styles.button} onClick={changePasswordHandler}>
+              Поменять
+            &lt;/button>
+          &lt;/div>
+        &lt;/form>
+      &lt;/section>
+    &lt;/ErrorModal>
+  );
+};
+export default EditProfile;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthForm">AuthForm</a></li><li><a href="global.html#AuthPage">AuthPage</a></li><li><a href="global.html#Avatar">Avatar</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ChatInputs">ChatInputs</a></li><li><a href="global.html#ChatMessages">ChatMessages</a></li><li><a href="global.html#ChatPage">ChatPage</a></li><li><a href="global.html#CustomLink">CustomLink</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#ErrorModal">ErrorModal</a></li><li><a href="global.html#FormatDate">FormatDate</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#InitialSettingsPage">InitialSettingsPage</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#LoadingSpinner">LoadingSpinner</a></li><li><a href="global.html#MenuButton">MenuButton</a></li><li><a href="global.html#Message">Message</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#ProtectedRoutes">ProtectedRoutes</a></li><li><a href="global.html#RegularMenu">RegularMenu</a></li><li><a href="global.html#RoundImage">RoundImage</a></li><li><a href="global.html#SideMenu">SideMenu</a></li><li><a href="global.html#UserInfo">UserInfo</a></li><li><a href="global.html#calcRemainingTime">calcRemainingTime</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#getUserInfoFromDb">getUserInfoFromDb</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#setUserInfoToDb">setUserInfoToDb</a></li><li><a href="global.html#useFirebase">useFirebase</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Tue Jan 24 2023 23:11:32 GMT+0300 (Москва, стандартное время)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

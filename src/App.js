@@ -3,24 +3,36 @@ import { useSelector } from "react-redux";
 
 import Layout from "./components/Layout/Layout";
 import AuthPage from "./components/pages/AuthPage";
+import ProtectedRoutes from "./components/pages/ProtectedRoutes";
 import ProfilePage from "./components/pages/ProfilePage";
 import HomePage from "./components/pages/HomePage";
 import InitialSettingsPage from "./components/pages/InitialSettingsPage";
-import EditProfile from "./components/Profile/EditProfile";
-import ProtectedRoutes from "./ProtectedRoutes";
 import ChatPage from "./components/pages/ChatPage";
 
 import "./styles/reset.module.scss";
 import "./styles/variables.module.scss";
 import styles from "./styles/app.module.scss";
 
+/**
+ * Main application component containing all routes and pages
+ * @returns routes and pages components
+ */
 function App() {
-  // checking if user is authenticated
-  const { user } = useSelector((state) => state.auth);
+  // Selecting data from redux
+  const { token } = useSelector((state) => state.auth);
   const { userData } = useSelector((state) => state.userInfo);
-  const isAuth = user !== null;
-  const nick = userData.displayName;
-  const hasNick = nick !== undefined;
+
+  /**
+   * used for authentication status check
+   * @const {boolean}
+   */
+  const isAuth = token !== null;
+
+  /**
+   * used for conditional routing if user does not has nickname
+   * @const {boolean}
+   */
+  const hasNick = userData.displayName !== undefined;
 
   return (
     <div className={styles.container}>
@@ -43,9 +55,7 @@ function App() {
                 {!hasNick && <InitialSettingsPage />}
               </ProtectedRoutes>
             }
-          >
-            <Route path="edit-profile" element={<EditProfile />} />
-          </Route>
+          />
           <Route
             path="chat"
             element={
@@ -55,7 +65,7 @@ function App() {
               </ProtectedRoutes>
             }
           />
-          <Route path="*" element={<p>There's nothing here: 404!</p>} />
+          <Route path="*" element={<p>Page not found</p>} />
         </Route>
       </Routes>
     </div>

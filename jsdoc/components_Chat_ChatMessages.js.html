@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/Chat/ChatMessages.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/Chat/ChatMessages.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useEffect, useRef, useState } from "react";
+import { db } from "../../firebase";
+import { ref, onValue } from "firebase/database";
+
+import { getUserInfoFromDb } from "../../store/userInfo-slice";
+
+import RoundImage from "../UI/RoundImage";
+
+import placeholderAvatar from "../../assets/placeholderAvatar.png";
+import styles from "./ChatMessages.module.scss";
+
+/**
+ * Component responsable for displaying and reloading messages
+ * @param {string} props.userId - containing userData's localId
+ * @returns messages list
+ */
+const ChatMessages = (props) => {
+  // used for scrolling to bottom
+  const bottom = useRef();
+
+  // defining array for mapping it later into message list
+  const [messages, setMessages] = useState([]);
+  // state for triggering useEffect
+  const [isMounted, setIsMounted] = useState(false);
+
+  // useEffect for tracking and responding to a realtime database change
+  useEffect(() => {
+    // reference for tracked database path (containing all messages)
+    const messagesRef = ref(db, `messages/`);
+
+    // Firebase API function that tracks and retrieves changes in specified database path
+    onValue(
+      messagesRef,
+      async (snapshot) => {
+        // retrieving messages data from database
+        const data = await snapshot.val();
+
+        const messages = [];
+        // iterating through received data
+        for (const key in data) {
+          const user = data[key];
+          let userInfo;
+          // getting user info from database (current iteration)
+          userInfo = await getUserInfoFromDb(key);
+
+          // iterating through this user messages
+          for (const msg in user) {
+            // creating new obj containing message data
+            // and adding to it user info we got from database
+            const msgWithId = {
+              ...user[msg],
+              profilePic:
+                userInfo.profilePicture === null
+                  ? null
+                  : userInfo.profilePicture,
+              nickname: userInfo.nickname,
+              index: msg,
+            };
+            // pushing new obj into messages array
+            messages.push(msgWithId);
+          }
+        }
+        // sorting through the messages array by time
+        messages.sort(function (a, b) {
+          // turning strings into dates, and then subtracting them
+          // to get a value that is either negative, positive, or zero.
+          return new Date(a.time) - new Date(b.time);
+        });
+
+        // setting state for rendering messages
+        setMessages(messages);
+        // setting state for triggering another useEffect for scroll (only once)
+        setIsMounted(true);
+      },
+      (error) => {
+        throw new Error(error.message);
+      }
+    );
+  }, []);
+
+  // useEffect that triggers when messages are loaded and scrolls list to the bottom ref
+  useEffect(() => {
+    if (isMounted) {
+      bottom.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [isMounted]);
+
+  return (
+    &lt;div id="messageList" className={styles.messages}>
+      &lt;ul className={styles["message-list"]}>
+        {messages.length > 0 &amp;&amp;
+          messages.map((item) => (
+            &lt;Message
+              key={item.index}
+              isOwner={item.ownerId === props.userId}
+              message={item.message}
+              date={item.time}
+              avatar={item.profilePic}
+              nick={item.nickname}
+            />
+          ))}
+      &lt;/ul>
+      &lt;div className={styles.bottom} ref={bottom} />
+    &lt;/div>
+  );
+};
+
+/**
+ * Component that represents each message in list
+ * @param {boolean} props.isOwner - tells if current user is owner of message
+ * @param {string} props.avatar - contains url of the user profile picture
+ * @param {string} props.message - content of message
+ * @param {string} props.date - date in ISO format
+ * @param {string} props.nick - nickname of the owner of message
+ * @returns message in list
+ */
+const Message = (props) => {
+  return (
+    &lt;li className={styles["list-item"]}>
+      &lt;div
+        className={`${styles["wrapper"]} ${props.isOwner ? styles.right : ""}`}
+      >
+        {!props.isOwner &amp;&amp; (
+          &lt;RoundImage
+            size="chat-pic"
+            profilePic={props.avatar ? props.avatar : placeholderAvatar}
+            alt="user-pic"
+          />
+        )}
+        &lt;span className={styles.message}>
+          {!props.isOwner &amp;&amp; &lt;p className={styles.nickname}>{props.nick}&lt;/p>}
+          {props.message}
+          &lt;FormatDate type="time" dateObj={props.date} />
+        &lt;/span>
+      &lt;/div>
+    &lt;/li>
+  );
+};
+
+/**
+ * Component that formats the date and time
+ * @param {string} props.dateObj - date in ISO format
+ * @returns formatted date
+ */
+const FormatDate = (props) => {
+  let output;
+  const dateObj = new Date(props.dateObj);
+  const date = dateObj.toLocaleDateString();
+  const time = dateObj.toLocaleTimeString();
+  if (props.type === "time") {
+    output = time.slice(0, 5);
+  } else if (props.type === "date") {
+    output = date;
+  }
+  return &lt;p className={styles["small-date"]}>{output}&lt;/p>;
+};
+
+export default ChatMessages;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthForm">AuthForm</a></li><li><a href="global.html#AuthPage">AuthPage</a></li><li><a href="global.html#Avatar">Avatar</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ChatInputs">ChatInputs</a></li><li><a href="global.html#ChatMessages">ChatMessages</a></li><li><a href="global.html#ChatPage">ChatPage</a></li><li><a href="global.html#CustomLink">CustomLink</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#ErrorModal">ErrorModal</a></li><li><a href="global.html#FormatDate">FormatDate</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#InitialSettingsPage">InitialSettingsPage</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#LoadingSpinner">LoadingSpinner</a></li><li><a href="global.html#MenuButton">MenuButton</a></li><li><a href="global.html#Message">Message</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#ProtectedRoutes">ProtectedRoutes</a></li><li><a href="global.html#RegularMenu">RegularMenu</a></li><li><a href="global.html#RoundImage">RoundImage</a></li><li><a href="global.html#SideMenu">SideMenu</a></li><li><a href="global.html#UserInfo">UserInfo</a></li><li><a href="global.html#calcRemainingTime">calcRemainingTime</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#getUserInfoFromDb">getUserInfoFromDb</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#setUserInfoToDb">setUserInfoToDb</a></li><li><a href="global.html#useFirebase">useFirebase</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Tue Jan 24 2023 23:11:32 GMT+0300 (Москва, стандартное время)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

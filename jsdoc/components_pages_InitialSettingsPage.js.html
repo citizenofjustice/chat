@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/pages/InitialSettingsPage.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/pages/InitialSettingsPage.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
+import { setUserInfoToDb, updateProfile } from "../../store/userInfo-slice";
+
+import Avatar from "../Profile/Avatar";
+import ErrorModal from "../UI/ErrorModal";
+import LoadingSpinner from "../UI/LoadingSpinner";
+
+import styles from "./InitialSettingsPage.module.scss";
+
+/**
+ * Initial settings page, where user needs to choose nickname
+ * @returns Initial settings page
+ */
+const InitialSettingsPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const nicknameInput = useRef();
+
+  // selecting data from redux
+  const { token, status, error } = useSelector((state) => state.auth);
+  const { userData } = useSelector((state) => state.userInfo);
+
+  /**
+   * Function that saves entered nickname
+   * @param {*} event - onClick event, when user clicks on button
+   */
+  const saveNicknameHandler = (event) => {
+    event.preventDefault();
+    const enteredNickname = nicknameInput.current.value.trim();
+
+    // if input field has some text
+    if (enteredNickname.length > 0) {
+      // saving nickname to redux
+      dispatch(
+        updateProfile({
+          type: "nickname",
+          token,
+          newValue: enteredNickname,
+        })
+      );
+      // setting nickname data to database
+      setUserInfoToDb(userData.localId, enteredNickname, "nickname");
+      nicknameInput.current.value = "";
+
+      // navigating to a homepage
+      navigate("/");
+    }
+  };
+
+  return (
+    &lt;ErrorModal isActive={status === "rejected"} errorMessage={error}>
+      {status === "pending" ? (
+        &lt;LoadingSpinner />
+      ) : (
+        &lt;section className={styles.initial}>
+          &lt;p className={styles.title}>Инициализация профиля:&lt;/p>
+          &lt;Avatar page="initial-pic" />
+          &lt;form className={styles["initial-info"]}>
+            &lt;span className={styles.nickname}>
+              &lt;label>Введите имя пользователя:&lt;/label>
+              &lt;input
+                autoFocus
+                ref={nicknameInput}
+                type="text"
+                id="set-nickname"
+              />
+            &lt;/span>
+            &lt;button className={styles.button} onClick={saveNicknameHandler}>
+              Готово
+            &lt;/button>
+          &lt;/form>
+        &lt;/section>
+      )}
+    &lt;/ErrorModal>
+  );
+};
+
+export default InitialSettingsPage;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthForm">AuthForm</a></li><li><a href="global.html#AuthPage">AuthPage</a></li><li><a href="global.html#Avatar">Avatar</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ChatInputs">ChatInputs</a></li><li><a href="global.html#ChatMessages">ChatMessages</a></li><li><a href="global.html#ChatPage">ChatPage</a></li><li><a href="global.html#CustomLink">CustomLink</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#ErrorModal">ErrorModal</a></li><li><a href="global.html#FormatDate">FormatDate</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#InitialSettingsPage">InitialSettingsPage</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#LoadingSpinner">LoadingSpinner</a></li><li><a href="global.html#MenuButton">MenuButton</a></li><li><a href="global.html#Message">Message</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#ProtectedRoutes">ProtectedRoutes</a></li><li><a href="global.html#RegularMenu">RegularMenu</a></li><li><a href="global.html#RoundImage">RoundImage</a></li><li><a href="global.html#SideMenu">SideMenu</a></li><li><a href="global.html#UserInfo">UserInfo</a></li><li><a href="global.html#calcRemainingTime">calcRemainingTime</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#getUserInfoFromDb">getUserInfoFromDb</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#setUserInfoToDb">setUserInfoToDb</a></li><li><a href="global.html#useFirebase">useFirebase</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Tue Jan 24 2023 23:11:32 GMT+0300 (Москва, стандартное время)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

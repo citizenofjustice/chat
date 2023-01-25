@@ -16,6 +16,7 @@ import chatSlice from "./chat-slice";
 import userInfoSlice from "./userInfo-slice";
 import uiSlice from "./ui-slice";
 
+// combining reducers for redux-persist
 const rootReducer = combineReducers({
   auth: authSlice.reducer,
   userInfo: userInfoSlice.reducer,
@@ -23,10 +24,11 @@ const rootReducer = combineReducers({
   chat: chatSlice.reducer,
 });
 
+// configurating redux persist
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ["ui", "chat"],
+  blacklist: ["ui", "chat"], // will not be persisted
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

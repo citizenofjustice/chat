@@ -1,33 +1,52 @@
-import styles from "./ChatMessages.module.scss";
 import { useEffect, useRef, useState } from "react";
-import { ref, onValue } from "firebase/database";
 import { db } from "../../firebase";
-import RoundImage from "../UI/RoundImage";
-import placeholderAvatar from "../../assets/placeholderAvatar.png";
+import { ref, onValue } from "firebase/database";
+
 import { getUserInfoFromDb } from "../../store/userInfo-slice";
 
-const ChatMessages = (props) => {
-  const [messages, setMessages] = useState([]);
-  const bottom = useRef();
-  // const [familiarUsers, setFamiliarUsers] = useState([]);
-  let [isMounted, setIsMounted] = useState(false);
+import RoundImage from "../UI/RoundImage";
 
+import placeholderAvatar from "../../assets/placeholderAvatar.png";
+import styles from "./ChatMessages.module.scss";
+
+/**
+ * Component responsable for displaying and reloading messages
+ * @param {string} props.userId - containing userData's localId
+ * @returns messages list
+ */
+const ChatMessages = (props) => {
+  // used for scrolling to bottom
+  const bottom = useRef();
+
+  // defining array for mapping it later into message list
+  const [messages, setMessages] = useState([]);
+  // state for triggering useEffect
+  const [isMounted, setIsMounted] = useState(false);
+
+  // useEffect for tracking and responding to a realtime database change
   useEffect(() => {
+    // reference for tracked database path (containing all messages)
     const messagesRef = ref(db, `messages/`);
+
+    // Firebase API function that tracks and retrieves changes in specified database path
     onValue(
       messagesRef,
       async (snapshot) => {
+        // retrieving messages data from database
         const data = await snapshot.val();
+
         const messages = [];
+        // iterating through received data
         for (const key in data) {
           const user = data[key];
           let userInfo;
-          // const familiar = familiarUsers.find((item) => item.userId === key);
-          // if (familiar === undefined) {
+          // getting user info from database (current iteration)
           userInfo = await getUserInfoFromDb(key);
-          // setFamiliarUsers((familiarUsers) => [...familiarUsers, userInfo]);
-          // } else userInfo = familiar;
+
+          // iterating through this user messages
           for (const msg in user) {
+            // creating new obj containing message data
+            // and adding to it user info we got from database
             const msgWithId = {
               ...user[msg],
               profilePic:
@@ -37,15 +56,20 @@ const ChatMessages = (props) => {
               nickname: userInfo.nickname,
               index: msg,
             };
+            // pushing new obj into messages array
             messages.push(msgWithId);
           }
         }
+        // sorting through the messages array by time
         messages.sort(function (a, b) {
-          // Turn your strings into dates, and then subtract them
+          // turning strings into dates, and then subtracting them
           // to get a value that is either negative, positive, or zero.
           return new Date(a.time) - new Date(b.time);
         });
+
+        // setting state for rendering messages
         setMessages(messages);
+        // setting state for triggering another useEffect for scroll (only once)
         setIsMounted(true);
       },
       (error) => {
@@ -54,6 +78,7 @@ const ChatMessages = (props) => {
     );
   }, []);
 
+  // useEffect that triggers when messages are loaded and scrolls list to the bottom ref
   useEffect(() => {
     if (isMounted) {
       bottom.current?.scrollIntoView({ behavior: "smooth" });
@@ -65,7 +90,7 @@ const ChatMessages = (props) => {
       <ul className={styles["message-list"]}>
         {messages.length > 0 &&
           messages.map((item) => (
-            <ListItem
+            <Message
               key={item.index}
               isOwner={item.ownerId === props.userId}
               message={item.message}
@@ -74,23 +99,22 @@ const ChatMessages = (props) => {
               nick={item.nickname}
             />
           ))}
-        {/* {props.currentMessage !== null && (
-          <ListItem
-            key={props.currentMessage.key}
-            isOwner={props.currentMessage.ownerId === props.userId}
-            message={props.currentMessage.message}
-            date={props.currentMessage.time}
-            avatar={props.currentMessage.profilePic}
-            nick={props.currentMessage.nickname}
-          />
-        )} */}
       </ul>
       <div className={styles.bottom} ref={bottom} />
     </div>
   );
 };
 
-const ListItem = (props) => {
+/**
+ * Component that represents each message in list
+ * @param {boolean} props.isOwner - tells if current user is owner of message
+ * @param {string} props.avatar - contains url of the user profile picture
+ * @param {string} props.message - content of message
+ * @param {string} props.date - date in ISO format
+ * @param {string} props.nick - nickname of the owner of message
+ * @returns message in list
+ */
+const Message = (props) => {
   return (
     <li className={styles["list-item"]}>
       <div
@@ -113,6 +137,11 @@ const ListItem = (props) => {
   );
 };
 
+/**
+ * Component that formats the date and time
+ * @param {string} props.dateObj - date in ISO format
+ * @returns formatted date
+ */
 const FormatDate = (props) => {
   let output;
   const dateObj = new Date(props.dateObj);

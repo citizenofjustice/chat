@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: store/chat-slice.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: store/chat-slice.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+export const sendMessage = createAsyncThunk(
+  "chat/sendMessage",
+  /**
+   * sendMessage async function for sending the message to a chat
+   * @returns {void | object}
+   */
+  async function ({ message, time }, { rejectWithValue, getState }) {
+    // getting current user local id from redux
+    const { localId } = getState().userInfo.userData;
+    try {
+      // sending the POST request to database for adding message by the current user
+      const response = await fetch(
+        `https://chat-app-1e2f6-default-rtdb.europe-west1.firebasedatabase.app/messages/${localId}.json`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            message,
+            time,
+            ownerId: localId,
+          }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      // reciving data from request
+      const data = await response.json();
+
+      // if request has failed throw error
+      if (!response.ok) {
+        let errorMessage = "Message sending failed!";
+        if (data &amp;&amp; data.error &amp;&amp; data.error.message) {
+          errorMessage = data.error.message;
+        }
+        throw new Error(errorMessage);
+      }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+/**
+ * object with initail state for a redux toolkit slice
+ * @const {object}
+ */
+const initialState = {
+  status: null,
+  error: null,
+};
+
+// defining slice for redux toolkit
+const chatSlice = createSlice({
+  name: "chat",
+  initialState,
+  reducers: {
+    /**
+     * Clear state on error modal closing
+     * @param {*} state
+     */
+    closeError(state) {
+      state.error = null;
+      state.status = null;
+    },
+  },
+  extraReducers: {
+    [sendMessage.pending]: (state) => {
+      state.status = "pending";
+      state.error = null;
+    },
+    [sendMessage.fulfilled]: (state) => {
+      state.status = "resolved";
+    },
+    [sendMessage.rejected]: (state, action) => {
+      state.status = "rejected";
+      state.error = action.payload;
+    },
+  },
+});
+
+export const chatActions = chatSlice.actions;
+export default chatSlice;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthForm">AuthForm</a></li><li><a href="global.html#AuthPage">AuthPage</a></li><li><a href="global.html#Avatar">Avatar</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ChatInputs">ChatInputs</a></li><li><a href="global.html#ChatMessages">ChatMessages</a></li><li><a href="global.html#ChatPage">ChatPage</a></li><li><a href="global.html#CustomLink">CustomLink</a></li><li><a href="global.html#EditProfile">EditProfile</a></li><li><a href="global.html#ErrorModal">ErrorModal</a></li><li><a href="global.html#FormatDate">FormatDate</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#InitialSettingsPage">InitialSettingsPage</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#LoadingSpinner">LoadingSpinner</a></li><li><a href="global.html#MenuButton">MenuButton</a></li><li><a href="global.html#Message">Message</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#ProtectedRoutes">ProtectedRoutes</a></li><li><a href="global.html#RegularMenu">RegularMenu</a></li><li><a href="global.html#RoundImage">RoundImage</a></li><li><a href="global.html#SideMenu">SideMenu</a></li><li><a href="global.html#UserInfo">UserInfo</a></li><li><a href="global.html#calcRemainingTime">calcRemainingTime</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#getUserInfoFromDb">getUserInfoFromDb</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#setUserInfoToDb">setUserInfoToDb</a></li><li><a href="global.html#useFirebase">useFirebase</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Tue Jan 24 2023 23:11:32 GMT+0300 (Москва, стандартное время)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

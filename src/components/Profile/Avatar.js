@@ -14,57 +14,91 @@ import defaultAvatar from "../../assets/placeholderAvatar.png";
 import RoundImage from "../UI/RoundImage";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import ErrorModal from "../UI/ErrorModal";
+
 import styles from "./Avatar.module.scss";
 
+/**
+ * Component responsable for displyaing and uploading image
+ * @param {string} props.page - contains info about future css className for RoundImage
+ * @returns avatar choosing component
+ */
 const Avatar = (props) => {
   const dispatch = useDispatch();
   const { uploadProfilePic } = useFirebase();
+
   const imageInputField = useRef();
 
+  // getting data form redux
   const { token } = useSelector((state) => state.auth);
   const { userData, status, error } = useSelector((state) => state.userInfo);
   const { localId, photoUrl } = userData;
 
+  // defining state for file input field value
   const [imageUpload, setImageUpload] = useState(null);
+  // defining state for current profile picture
   const [profilePic, setProfilePic] = useState(null);
 
+  // folder ref for firebase storage, where user avatar is stored
   const profilePicFolderRef = ref(storage, `${localId}/profile-picture/`);
 
-  const fetchProfilePic = useCallback(async () => {
+  // function for upatating profile picture
+  const updateProfilePic = useCallback(async () => {
     dispatch(getUserInfo(token));
     if (photoUrl === undefined) {
       setProfilePic(defaultAvatar);
     } else setProfilePic(photoUrl);
   }, [photoUrl, dispatch, token]);
 
+  /**
+   * Async function for uploading chosen image into storage with certian path
+   * @returns {void}
+   */
   const uploadImageHandler = async () => {
+    // if file input field is empty stop execution
     if (imageUpload === null) return;
+
+    // defining path in which file will be placed in storage
     const imageRef = ref(
       storage,
       `${localId}/profile-picture/${imageUpload.name}`
     );
+    console.log(imageUpload);
+    // calling function for uploading file and
+    // setting return value with url into const
     const imageUrl = await uploadProfilePic(
       imageRef,
       imageUpload,
       profilePicFolderRef
     );
+    // resetting input field after upload
     setImageUpload(null);
     imageInputField.current.value = null;
+
+    // setting profile picture with recived url
     setProfilePic(imageUrl);
+
+    // sending url data to database
     await setUserInfoToDb(localId, imageUrl, "profilePicture");
+
+    // updating redux states
     dispatch(
       updateProfile({ type: "profilePicture", token, newValue: imageUrl })
     );
   };
 
+  /**
+   * Function for canceling upload
+   * triggers with onClick on a button
+   */
   const canelUploadHandler = () => {
     setImageUpload(null);
     imageInputField.current.value = null;
   };
 
+  // useEffect for updating picture
   useEffect(() => {
-    fetchProfilePic();
-  }, [fetchProfilePic]);
+    updateProfilePic();
+  }, [updateProfilePic]);
 
   return (
     <ErrorModal isActive={status === "rejected"} errorMessage={error}>
@@ -100,6 +134,7 @@ const Avatar = (props) => {
               ref={imageInputField}
               id="image-upload"
               type="file"
+              accept="image/*"
               onChange={(event) => {
                 setImageUpload(event.target.files[0]);
               }}

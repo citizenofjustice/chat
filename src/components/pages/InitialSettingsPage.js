@@ -7,19 +7,33 @@ import { setUserInfoToDb, updateProfile } from "../../store/userInfo-slice";
 import Avatar from "../Profile/Avatar";
 import ErrorModal from "../UI/ErrorModal";
 import LoadingSpinner from "../UI/LoadingSpinner";
+
 import styles from "./InitialSettingsPage.module.scss";
 
+/**
+ * Initial settings page, where user needs to choose nickname
+ * @returns Initial settings page
+ */
 const InitialSettingsPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const nicknameInput = useRef();
+
+  // selecting data from redux
   const { token, status, error } = useSelector((state) => state.auth);
   const { userData } = useSelector((state) => state.userInfo);
-  const dispatch = useDispatch();
-  const nicknameInput = useRef();
-  const navigate = useNavigate();
 
+  /**
+   * Function that saves entered nickname
+   * @param {*} event - onClick event, when user clicks on button
+   */
   const saveNicknameHandler = (event) => {
     event.preventDefault();
     const enteredNickname = nicknameInput.current.value.trim();
+
+    // if input field has some text
     if (enteredNickname.length > 0) {
+      // saving nickname to redux
       dispatch(
         updateProfile({
           type: "nickname",
@@ -27,9 +41,12 @@ const InitialSettingsPage = () => {
           newValue: enteredNickname,
         })
       );
+      // setting nickname data to database
       setUserInfoToDb(userData.localId, enteredNickname, "nickname");
-      navigate("/");
       nicknameInput.current.value = "";
+
+      // navigating to a homepage
+      navigate("/");
     }
   };
 
